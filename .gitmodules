@@ -1,0 +1,3 @@
+[submodule "dapplink-wallet-proto"]
+	path = dapplink-wallet-proto
+	url = git@github.com:the-web3/dapplink-wallet-proto.git
