@@ -7,6 +7,8 @@ import (
 	"sync/atomic"
 
 	"github.com/ethereum/go-ethereum/log"
+	"github.com/the-web3/mock-risk-server/client/walletapiclient"
+	"github.com/the-web3/mock-risk-server/database"
 	"github.com/the-web3/mock-risk-server/protobuf/riskcontroller"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
@@ -21,12 +23,16 @@ type RiskServerConfig struct {
 
 type RiskServerWireServices struct {
 	*RiskServerConfig
-	stopped atomic.Bool
+	db           *database.DB
+	rpcApiClient *walletapiclient.WalletApiGateWayServiceClient
+	stopped      atomic.Bool
 }
 
-func NewRiskServerWireServices(config *RiskServerConfig) (*RiskServerWireServices, error) {
+func NewRiskServerWireServices(config *RiskServerConfig, db *database.DB, rpcApiClient *walletapiclient.WalletApiGateWayServiceClient) (*RiskServerWireServices, error) {
 	return &RiskServerWireServices{
+		db:               db,
 		RiskServerConfig: config,
+		rpcApiClient:     rpcApiClient,
 	}, nil
 }
 
@@ -49,7 +55,7 @@ func (rss *RiskServerWireServices) Start(ctx context.Context) error {
 
 		riskcontroller.RegisterRiskControllerServicesServer(gs, rss)
 
-		log.Info("Grpc info", "port", rss.GrpcPort, "address", listener.Addr())
+		log.Info("grpc info", "port", rss.GrpcPort, "address", listener.Addr())
 
 		if err := gs.Serve(listener); err != nil {
 			log.Error("Could not GRPC server")

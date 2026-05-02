@@ -4,95 +4,81 @@ import (
 	"context"
 	"errors"
 	"fmt"
+
 	"github.com/urfave/cli/v2"
-	"os"
 
 	"github.com/the-web3/mock-risk-server/common/opio"
 )
 
+// Lifecycle 接口定义了应用程序的生命周期管理方法。
+// Start: 启动应用程序。
+// Stop: 停止应用程序。
+// Stopped: 检查应用程序是否已经停止。
 type Lifecycle interface {
-	// Start starts a service. A service only fully starts once. Subsequent starts may return an error.
-	// A context is provided to end the service during setup.
-	// The caller should call Stop to clean up after failing to start.
 	Start(ctx context.Context) error
-	// Stop stops a service gracefully.
-	// The provided ctx can force an accelerated shutdown,
-	// but the node still has to completely stop.
 	Stop(ctx context.Context) error
-	// Stopped determines if the service was stopped with Stop.
 	Stopped() bool
 }
 
-// LifecycleAction instantiates a Lifecycle based on a CLI context.
-// With the close argument a lifecycle may choose to shut itself down.
-// A service may choose to idle, dump debug information or otherwise delay
-// a shutdown when the Stop context is not expired.
+// LifecycleAction 是一个函数类型，用于初始化一个生命周期管理对象。
+// 它接收命令行上下文和取消函数，返回一个实现了 Lifecycle 接口的对象。
 type LifecycleAction func(ctx *cli.Context, close context.CancelCauseFunc) (Lifecycle, error)
 
-// LifecycleCmd turns a LifecycleAction into an CLI action,
-// by instrumenting it with CLI context and signal based termination.
-// The app may continue to run post-processing until fully shutting down.
-// The user can force an early shut-down during post-processing by sending a second interruption signal.
-func LifecycleCmd(fn LifecycleAction) cli.ActionFunc {
-	return lifecycleCmd(fn, opio.BlockOnInterruptsContext)
-}
-
-type waitSignalFn func(ctx context.Context, signals ...os.Signal)
-
+// interruptErr 表示一个中断信号错误，当用户按下 Ctrl+C 或其他中断信号时，将触发该错误。
 var interruptErr = errors.New("interrupt signal")
 
-func lifecycleCmd(fn LifecycleAction, blockOnInterrupt waitSignalFn) cli.ActionFunc {
+// LifecycleCmd 是一个函数，用于创建一个 cli.ActionFunc。
+// 该函数会调用生命周期管理操作，并在中断信号时优雅地关闭应用。
+func LifecycleCmd(fn LifecycleAction) cli.ActionFunc {
+	// 定义一个函数，用于在接收到中断信号时阻塞当前上下文
+	blockOnInterrupt := opio.BlockOnInterruptsContext
 	return func(ctx *cli.Context) error {
+		// 从命令行上下文中获取主上下文，并创建带取消功能的应用上下文
 		hostCtx := ctx.Context
 		appCtx, appCancel := context.WithCancelCause(hostCtx)
 		ctx.Context = appCtx
-
+		// 启动一个 Goroutine，监听中断信号，触发取消操作
 		go func() {
 			blockOnInterrupt(appCtx)
+			// 当接收到中断信号时，调用取消函数，传递中断错误
 			appCancel(interruptErr)
 		}()
-
+		// 调用传入的 LifecycleAction 函数，获取生命周期管理对象
 		appLifecycle, err := fn(ctx, appCancel)
 		if err != nil {
-			// join errors to include context cause (nil errors are dropped)
+			// 如果初始化失败，返回错误信息
 			return errors.Join(
 				fmt.Errorf("failed to setup: %w", err),
 				context.Cause(appCtx),
 			)
 		}
-
+		// 调用生命周期管理对象的 Start 方法，启动应用
 		if err := appLifecycle.Start(appCtx); err != nil {
-			// join errors to include context cause (nil errors are dropped)
+			// 如果启动失败，返回错误信息
 			return errors.Join(
 				fmt.Errorf("failed to start: %w", err),
 				context.Cause(appCtx),
 			)
 		}
-
-		// wait for app to be closed (through interrupt, or app requests to be stopped by closing the context)
+		// 等待应用程序上下文完成，也就是等待程序结束或接收到中断信号
 		<-appCtx.Done()
-
-		// Graceful stop context.
-		// This allows the service to idle before shutdown, if halted. User may interrupt.
+		// 当应用上下文完成后，创建停止上下文，用于优雅停止应用程序
 		stopCtx, stopCancel := context.WithCancelCause(hostCtx)
 		go func() {
 			blockOnInterrupt(stopCtx)
+			// 在停止过程中，如果接收到中断信号，取消停止操作
 			stopCancel(interruptErr)
 		}()
-
-		// Execute graceful stop.
+		// 调用生命周期管理对象的 Stop 方法，停止应用程序
 		stopErr := appLifecycle.Stop(stopCtx)
-		stopCancel(nil)
-		// note: Stop implementation may choose to suppress a context error,
-		// if it handles it well (e.g. stop idling after a halt).
+		stopCancel(nil) // 停止取消操作
 		if stopErr != nil {
-			// join errors to include context cause (nil errors are dropped)
+			// 如果停止过程中发生错误，返回错误信息
 			return errors.Join(
 				fmt.Errorf("failed to stop: %w", stopErr),
 				context.Cause(stopCtx),
 			)
 		}
-
 		return nil
 	}
 }

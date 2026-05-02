@@ -10,6 +10,16 @@ type Config struct {
 	Migrations    string
 	RpcServer     ServerConfig
 	MetricsServer ServerConfig
+	ApiGateWayRpc string
+	DbConf        DBConfig
+}
+
+type DBConfig struct {
+	Host     string
+	Port     int
+	Name     string
+	User     string
+	Password string
 }
 
 type ServerConfig struct {

@@ -468,6 +468,7 @@ type UserTransaction struct {
 	FromAddress   string                 `protobuf:"bytes,2,opt,name=from_address,json=fromAddress,proto3" json:"from_address,omitempty"`
 	ToAddress     string                 `protobuf:"bytes,3,opt,name=to_address,json=toAddress,proto3" json:"to_address,omitempty"`
 	Amount        string                 `protobuf:"bytes,4,opt,name=amount,proto3" json:"amount,omitempty"`
+	TokenAddress  string                 `protobuf:"bytes,5,opt,name=token_address,json=tokenAddress,proto3" json:"token_address,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -530,6 +531,13 @@ func (x *UserTransaction) GetAmount() string {
 	return ""
 }
 
+func (x *UserTransaction) GetTokenAddress() string {
+	if x != nil {
+		return x.TokenAddress
+	}
+	return ""
+}
+
 type CheckUserTransactionRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	ConsumerToken string                 `protobuf:"bytes,1,opt,name=consumer_token,json=consumerToken,proto3" json:"consumer_token,omitempty"`
@@ -584,8 +592,9 @@ func (x *CheckUserTransactionRequest) GetUserTxn() []*UserTransaction {
 
 type RetUserTransaction struct {
 	state          protoimpl.MessageState `protogen:"open.v1"`
-	TxBodyHash     string                 `protobuf:"bytes,1,opt,name=tx_body_hash,json=txBodyHash,proto3" json:"tx_body_hash,omitempty"`
-	TxBodyRiskHash string                 `protobuf:"bytes,2,opt,name=tx_body_risk_hash,json=txBodyRiskHash,proto3" json:"tx_body_risk_hash,omitempty"`
+	RequestId      string                 `protobuf:"bytes,1,opt,name=request_id,json=requestId,proto3" json:"request_id,omitempty"`
+	TxBodyHash     string                 `protobuf:"bytes,2,opt,name=tx_body_hash,json=txBodyHash,proto3" json:"tx_body_hash,omitempty"`
+	TxBodyRiskHash string                 `protobuf:"bytes,3,opt,name=tx_body_risk_hash,json=txBodyRiskHash,proto3" json:"tx_body_risk_hash,omitempty"`
 	unknownFields  protoimpl.UnknownFields
 	sizeCache      protoimpl.SizeCache
 }
@@ -618,6 +627,13 @@ func (x *RetUserTransaction) ProtoReflect() protoreflect.Message {
 // Deprecated: Use RetUserTransaction.ProtoReflect.Descriptor instead.
 func (*RetUserTransaction) Descriptor() ([]byte, []int) {
 	return file_dapplink_riskcontroller_proto_rawDescGZIP(), []int{10}
+}
+
+func (x *RetUserTransaction) GetRequestId() string {
+	if x != nil {
+		return x.RequestId
+	}
+	return ""
 }
 
 func (x *RetUserTransaction) GetTxBodyHash() string {
@@ -728,21 +744,24 @@ const file_dapplink_riskcontroller_proto_rawDesc = "" +
 	"\x1eCheckChainTransactionsResponse\x12(\n" +
 	"\x04code\x18\x01 \x01(\x0e2\x14.dapplink.ReturnCodeR\x04code\x12\x10\n" +
 	"\x03msg\x18\x02 \x01(\tR\x03msg\x12A\n" +
-	"\rret_chain_txn\x18\x03 \x03(\v2\x1d.dapplink.RetChainTransactionR\vretChainTxn\"\x8a\x01\n" +
+	"\rret_chain_txn\x18\x03 \x03(\v2\x1d.dapplink.RetChainTransactionR\vretChainTxn\"\xaf\x01\n" +
 	"\x0fUserTransaction\x12\x1d\n" +
 	"\n" +
 	"request_id\x18\x01 \x01(\tR\trequestId\x12!\n" +
 	"\ffrom_address\x18\x02 \x01(\tR\vfromAddress\x12\x1d\n" +
 	"\n" +
 	"to_address\x18\x03 \x01(\tR\ttoAddress\x12\x16\n" +
-	"\x06amount\x18\x04 \x01(\tR\x06amount\"z\n" +
+	"\x06amount\x18\x04 \x01(\tR\x06amount\x12#\n" +
+	"\rtoken_address\x18\x05 \x01(\tR\ftokenAddress\"z\n" +
 	"\x1bcheckUserTransactionRequest\x12%\n" +
 	"\x0econsumer_token\x18\x01 \x01(\tR\rconsumerToken\x124\n" +
-	"\buser_txn\x18\x02 \x03(\v2\x19.dapplink.UserTransactionR\auserTxn\"a\n" +
-	"\x12RetUserTransaction\x12 \n" +
-	"\ftx_body_hash\x18\x01 \x01(\tR\n" +
+	"\buser_txn\x18\x02 \x03(\v2\x19.dapplink.UserTransactionR\auserTxn\"\x80\x01\n" +
+	"\x12RetUserTransaction\x12\x1d\n" +
+	"\n" +
+	"request_id\x18\x01 \x01(\tR\trequestId\x12 \n" +
+	"\ftx_body_hash\x18\x02 \x01(\tR\n" +
 	"txBodyHash\x12)\n" +
-	"\x11tx_body_risk_hash\x18\x02 \x01(\tR\x0etxBodyRiskHash\"\x9a\x01\n" +
+	"\x11tx_body_risk_hash\x18\x03 \x01(\tR\x0etxBodyRiskHash\"\x9a\x01\n" +
 	"\x1ccheckUserTransactionResponse\x12(\n" +
 	"\x04code\x18\x01 \x01(\x0e2\x14.dapplink.ReturnCodeR\x04code\x12\x10\n" +
 	"\x03msg\x18\x02 \x01(\tR\x03msg\x12>\n" +

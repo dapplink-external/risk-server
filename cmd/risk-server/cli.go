@@ -3,7 +3,13 @@ package main
 import (
 	"context"
 
+	"github.com/the-web3/mock-risk-server/client/walletapiclient"
+	"github.com/the-web3/mock-risk-server/common/opio"
+	"github.com/the-web3/mock-risk-server/database"
+	"github.com/the-web3/mock-risk-server/protobuf/walletapi"
 	"github.com/urfave/cli/v2"
+	"google.golang.org/grpc"
+	"google.golang.org/grpc/credentials/insecure"
 
 	"github.com/ethereum/go-ethereum/log"
 	"github.com/the-web3/mock-risk-server/common/cliapp"
@@ -22,7 +28,43 @@ func runRpc(ctx *cli.Context, shutdown context.CancelCauseFunc) (cliapp.Lifecycl
 		GrpcHostname: cfg.RpcServer.Host,
 		GrpcPort:     cfg.RpcServer.Port,
 	}
-	return services.NewRiskServerWireServices(ristServerConfig)
+
+	connApi, err := grpc.NewClient(cfg.ApiGateWayRpc, grpc.WithTransportCredentials(insecure.NewCredentials()))
+	if err != nil {
+		log.Error("Connect to da retriever fail", "err", err)
+		return nil, err
+	}
+	gateWayClient := walletapi.NewWalletApiGateWayServiceClient(connApi)
+
+	apiGateWayClient, err := walletapiclient.NewWalletApiGateWayServiceClient(context.Background(), gateWayClient, "DappLinkEthereum")
+	if err != nil {
+		log.Error("Connect to da retriever fail", "err", err)
+		return nil, err
+	}
+
+	return services.NewRiskServerWireServices(ristServerConfig, apiGateWayClient)
+}
+
+func runMigrations(ctx *cli.Context) error {
+	ctx.Context = opio.CancelOnInterrupt(ctx.Context)
+	log.Info("running migrations...")
+	cfg, err := config.LoadConfig(ctx)
+	if err != nil {
+		log.Error("failed to load config", "err", err)
+		return err
+	}
+	db, err := database.NewDB(ctx.Context, cfg.DbConf)
+	if err != nil {
+		log.Error("failed to connect to database", "err", err)
+		return err
+	}
+	defer func(db *database.DB) {
+		err := db.Close()
+		if err != nil {
+			log.Error("fail to close database", "err", err)
+		}
+	}(db)
+	return db.ExecuteSQLMigration(cfg.Migrations)
 }
 
 func NewCli() *cli.App {
@@ -37,6 +79,12 @@ func NewCli() *cli.App {
 				Flags:       flags,
 				Description: "Run rpc services",
 				Action:      cliapp.LifecycleCmd(runRpc),
+			},
+			{
+				Name:        "migrate",
+				Flags:       flags,
+				Description: "Run database migrations",
+				Action:      runMigrations,
 			},
 			{
 				Name:        "version",
