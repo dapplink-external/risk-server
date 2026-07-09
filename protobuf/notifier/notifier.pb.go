@@ -7,7 +7,7 @@
 package notifier
 
 import (
-	"github.com/the-web3/mock-risk-server/protobuf/common"
+	common "../protobuf/common"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	reflect "reflect"
@@ -31,9 +31,10 @@ type DepositWithdrawInfo struct {
 	ToAddress     string                 `protobuf:"bytes,5,opt,name=to_address,json=toAddress,proto3" json:"to_address,omitempty"`
 	Amount        string                 `protobuf:"bytes,6,opt,name=amount,proto3" json:"amount,omitempty"`
 	Fee           string                 `protobuf:"bytes,7,opt,name=fee,proto3" json:"fee,omitempty"`
-	TxType        uint32                 `protobuf:"varint,8,opt,name=tx_type,json=txType,proto3" json:"tx_type,omitempty"`
-	Status        uint32                 `protobuf:"varint,9,opt,name=status,proto3" json:"status,omitempty"`
+	TxType        string                 `protobuf:"bytes,8,opt,name=tx_type,json=txType,proto3" json:"tx_type,omitempty"`
+	Status        string                 `protobuf:"bytes,9,opt,name=status,proto3" json:"status,omitempty"`
 	Confirms      uint64                 `protobuf:"varint,10,opt,name=confirms,proto3" json:"confirms,omitempty"`
+	TokenAddress  string                 `protobuf:"bytes,11,opt,name=token_address,json=tokenAddress,proto3" json:"token_address,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -117,18 +118,18 @@ func (x *DepositWithdrawInfo) GetFee() string {
 	return ""
 }
 
-func (x *DepositWithdrawInfo) GetTxType() uint32 {
+func (x *DepositWithdrawInfo) GetTxType() string {
 	if x != nil {
 		return x.TxType
 	}
-	return 0
+	return ""
 }
 
-func (x *DepositWithdrawInfo) GetStatus() uint32 {
+func (x *DepositWithdrawInfo) GetStatus() string {
 	if x != nil {
 		return x.Status
 	}
-	return 0
+	return ""
 }
 
 func (x *DepositWithdrawInfo) GetConfirms() uint64 {
@@ -136,6 +137,13 @@ func (x *DepositWithdrawInfo) GetConfirms() uint64 {
 		return x.Confirms
 	}
 	return 0
+}
+
+func (x *DepositWithdrawInfo) GetTokenAddress() string {
+	if x != nil {
+		return x.TokenAddress
+	}
+	return ""
 }
 
 type DepositWithdrawNotifyRequest struct {
@@ -314,7 +322,7 @@ var File_dapplink_notifier_proto protoreflect.FileDescriptor
 
 const file_dapplink_notifier_proto_rawDesc = "" +
 	"\n" +
-	"\x17dapplink/notifier.proto\x12\bdapplink\x1a\x15dapplink/common.proto\"\xa9\x02\n" +
+	"\x17dapplink/notifier.proto\x12\bdapplink\x1a\x15dapplink/common.proto\"\xce\x02\n" +
 	"\x13depositWithdrawInfo\x12!\n" +
 	"\fblock_number\x18\x01 \x01(\x04R\vblockNumber\x12\x1d\n" +
 	"\n" +
@@ -325,10 +333,11 @@ const file_dapplink_notifier_proto_rawDesc = "" +
 	"to_address\x18\x05 \x01(\tR\ttoAddress\x12\x16\n" +
 	"\x06amount\x18\x06 \x01(\tR\x06amount\x12\x10\n" +
 	"\x03fee\x18\a \x01(\tR\x03fee\x12\x17\n" +
-	"\atx_type\x18\b \x01(\rR\x06txType\x12\x16\n" +
-	"\x06status\x18\t \x01(\rR\x06status\x12\x1a\n" +
+	"\atx_type\x18\b \x01(\tR\x06txType\x12\x16\n" +
+	"\x06status\x18\t \x01(\tR\x06status\x12\x1a\n" +
 	"\bconfirms\x18\n" +
-	" \x01(\x04R\bconfirms\"{\n" +
+	" \x01(\x04R\bconfirms\x12#\n" +
+	"\rtoken_address\x18\v \x01(\tR\ftokenAddress\"{\n" +
 	"\x1cdepositWithdrawNotifyRequest\x12%\n" +
 	"\x0econsumer_token\x18\x01 \x01(\tR\rconsumerToken\x124\n" +
 	"\x06dw_txn\x18\x02 \x03(\v2\x1d.dapplink.depositWithdrawInfoR\x05dwTxn\"l\n" +

@@ -7,7 +7,7 @@
 package dapplinkwallet
 
 import (
-	"github.com/the-web3/mock-risk-server/protobuf/common"
+	common "../protobuf/common"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	reflect "reflect"
@@ -589,8 +589,9 @@ func (x *WithdrawTransactionResponse) GetMsg() string {
 
 type SetTokenAddressRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	RequestId     string                 `protobuf:"bytes,1,opt,name=request_id,json=requestId,proto3" json:"request_id,omitempty"`
-	TokenList     []*Token               `protobuf:"bytes,2,rep,name=token_list,json=tokenList,proto3" json:"token_list,omitempty"`
+	ConsumerToken string                 `protobuf:"bytes,1,opt,name=consumer_token,json=consumerToken,proto3" json:"consumer_token,omitempty"`
+	RequestId     string                 `protobuf:"bytes,2,opt,name=request_id,json=requestId,proto3" json:"request_id,omitempty"`
+	TokenList     []*Token               `protobuf:"bytes,3,rep,name=token_list,json=tokenList,proto3" json:"token_list,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -623,6 +624,13 @@ func (x *SetTokenAddressRequest) ProtoReflect() protoreflect.Message {
 // Deprecated: Use SetTokenAddressRequest.ProtoReflect.Descriptor instead.
 func (*SetTokenAddressRequest) Descriptor() ([]byte, []int) {
 	return file_dapplink_wallerpcservice_proto_rawDescGZIP(), []int{9}
+}
+
+func (x *SetTokenAddressRequest) GetConsumerToken() string {
+	if x != nil {
+		return x.ConsumerToken
+	}
+	return ""
 }
 
 func (x *SetTokenAddressRequest) GetRequestId() string {
@@ -691,6 +699,126 @@ func (x *SetTokenAddressResponse) GetMsg() string {
 	return ""
 }
 
+type CreateAddressRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	ConsumerToken string                 `protobuf:"bytes,1,opt,name=consumer_token,json=consumerToken,proto3" json:"consumer_token,omitempty"`
+	RequestId     string                 `protobuf:"bytes,2,opt,name=request_id,json=requestId,proto3" json:"request_id,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *CreateAddressRequest) Reset() {
+	*x = CreateAddressRequest{}
+	mi := &file_dapplink_wallerpcservice_proto_msgTypes[11]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *CreateAddressRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*CreateAddressRequest) ProtoMessage() {}
+
+func (x *CreateAddressRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_dapplink_wallerpcservice_proto_msgTypes[11]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use CreateAddressRequest.ProtoReflect.Descriptor instead.
+func (*CreateAddressRequest) Descriptor() ([]byte, []int) {
+	return file_dapplink_wallerpcservice_proto_rawDescGZIP(), []int{11}
+}
+
+func (x *CreateAddressRequest) GetConsumerToken() string {
+	if x != nil {
+		return x.ConsumerToken
+	}
+	return ""
+}
+
+func (x *CreateAddressRequest) GetRequestId() string {
+	if x != nil {
+		return x.RequestId
+	}
+	return ""
+}
+
+type CreateAddressResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Code          common.ReturnCode      `protobuf:"varint,1,opt,name=code,proto3,enum=dapplink.ReturnCode" json:"code,omitempty"`
+	Msg           string                 `protobuf:"bytes,2,opt,name=msg,proto3" json:"msg,omitempty"`
+	Type          string                 `protobuf:"bytes,3,opt,name=type,proto3" json:"type,omitempty"`
+	Address       string                 `protobuf:"bytes,4,opt,name=address,proto3" json:"address,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *CreateAddressResponse) Reset() {
+	*x = CreateAddressResponse{}
+	mi := &file_dapplink_wallerpcservice_proto_msgTypes[12]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *CreateAddressResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*CreateAddressResponse) ProtoMessage() {}
+
+func (x *CreateAddressResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_dapplink_wallerpcservice_proto_msgTypes[12]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use CreateAddressResponse.ProtoReflect.Descriptor instead.
+func (*CreateAddressResponse) Descriptor() ([]byte, []int) {
+	return file_dapplink_wallerpcservice_proto_rawDescGZIP(), []int{12}
+}
+
+func (x *CreateAddressResponse) GetCode() common.ReturnCode {
+	if x != nil {
+		return x.Code
+	}
+	return common.ReturnCode(0)
+}
+
+func (x *CreateAddressResponse) GetMsg() string {
+	if x != nil {
+		return x.Msg
+	}
+	return ""
+}
+
+func (x *CreateAddressResponse) GetType() string {
+	if x != nil {
+		return x.Type
+	}
+	return ""
+}
+
+func (x *CreateAddressResponse) GetAddress() string {
+	if x != nil {
+		return x.Address
+	}
+	return ""
+}
+
 var File_dapplink_wallerpcservice_proto protoreflect.FileDescriptor
 
 const file_dapplink_wallerpcservice_proto_rawDesc = "" +
@@ -742,20 +870,31 @@ const file_dapplink_wallerpcservice_proto_rawDesc = "" +
 	"\fwithdraw_txn\x18\x02 \x03(\v2\x15.dapplink.WithdrawTxnR\vwithdrawTxn\"Y\n" +
 	"\x1bwithdrawTransactionResponse\x12(\n" +
 	"\x04code\x18\x01 \x01(\x0e2\x14.dapplink.ReturnCodeR\x04code\x12\x10\n" +
-	"\x03msg\x18\x02 \x01(\tR\x03msg\"g\n" +
-	"\x16SetTokenAddressRequest\x12\x1d\n" +
+	"\x03msg\x18\x02 \x01(\tR\x03msg\"\x8e\x01\n" +
+	"\x16SetTokenAddressRequest\x12%\n" +
+	"\x0econsumer_token\x18\x01 \x01(\tR\rconsumerToken\x12\x1d\n" +
 	"\n" +
-	"request_id\x18\x01 \x01(\tR\trequestId\x12.\n" +
+	"request_id\x18\x02 \x01(\tR\trequestId\x12.\n" +
 	"\n" +
-	"token_list\x18\x02 \x03(\v2\x0f.dapplink.TokenR\ttokenList\"U\n" +
+	"token_list\x18\x03 \x03(\v2\x0f.dapplink.TokenR\ttokenList\"U\n" +
 	"\x17SetTokenAddressResponse\x12(\n" +
 	"\x04code\x18\x01 \x01(\x0e2\x14.dapplink.ReturnCodeR\x04code\x12\x10\n" +
-	"\x03msg\x18\x02 \x01(\tR\x03msg2\x9f\x03\n" +
+	"\x03msg\x18\x02 \x01(\tR\x03msg\"\\\n" +
+	"\x14CreateAddressRequest\x12%\n" +
+	"\x0econsumer_token\x18\x01 \x01(\tR\rconsumerToken\x12\x1d\n" +
+	"\n" +
+	"request_id\x18\x02 \x01(\tR\trequestId\"\x81\x01\n" +
+	"\x15CreateAddressResponse\x12(\n" +
+	"\x04code\x18\x01 \x01(\x0e2\x14.dapplink.ReturnCodeR\x04code\x12\x10\n" +
+	"\x03msg\x18\x02 \x01(\tR\x03msg\x12\x12\n" +
+	"\x04type\x18\x03 \x01(\tR\x04type\x12\x18\n" +
+	"\aaddress\x18\x04 \x01(\tR\aaddress2\xf6\x03\n" +
 	"\x1aBusinessMiddleWireServices\x12[\n" +
 	"\x10businessRegister\x12!.dapplink.BusinessRegisterRequest\x1a\".dapplink.BusinessRegisterResponse\"\x00\x12X\n" +
 	"\x0fsetTokenAddress\x12 .dapplink.SetTokenAddressRequest\x1a!.dapplink.SetTokenAddressResponse\"\x00\x12d\n" +
 	"\x1bexportAddressesByPublicKeys\x12 .dapplink.ExportAddressesRequest\x1a!.dapplink.ExportAddressesResponse\"\x00\x12d\n" +
-	"\x13withdrawTransaction\x12$.dapplink.withdrawTransactionRequest\x1a%.dapplink.withdrawTransactionResponse\"\x00B\x1cZ\x1a../protobuf/dapplinkwalletb\x06proto3"
+	"\x13withdrawTransaction\x12$.dapplink.withdrawTransactionRequest\x1a%.dapplink.withdrawTransactionResponse\"\x00\x12U\n" +
+	"\x10createOneAddress\x12\x1e.dapplink.CreateAddressRequest\x1a\x1f.dapplink.CreateAddressResponse\"\x00B\x1cZ\x1a../protobuf/dapplinkwalletb\x06proto3"
 
 var (
 	file_dapplink_wallerpcservice_proto_rawDescOnce sync.Once
@@ -769,7 +908,7 @@ func file_dapplink_wallerpcservice_proto_rawDescGZIP() []byte {
 	return file_dapplink_wallerpcservice_proto_rawDescData
 }
 
-var file_dapplink_wallerpcservice_proto_msgTypes = make([]protoimpl.MessageInfo, 11)
+var file_dapplink_wallerpcservice_proto_msgTypes = make([]protoimpl.MessageInfo, 13)
 var file_dapplink_wallerpcservice_proto_goTypes = []any{
 	(*Address)(nil),                     // 0: dapplink.Address
 	(*Token)(nil),                       // 1: dapplink.Token
@@ -782,31 +921,36 @@ var file_dapplink_wallerpcservice_proto_goTypes = []any{
 	(*WithdrawTransactionResponse)(nil), // 8: dapplink.withdrawTransactionResponse
 	(*SetTokenAddressRequest)(nil),      // 9: dapplink.SetTokenAddressRequest
 	(*SetTokenAddressResponse)(nil),     // 10: dapplink.SetTokenAddressResponse
-	(common.ReturnCode)(0),              // 11: dapplink.ReturnCode
-	(*common.PublicKey)(nil),            // 12: dapplink.PublicKey
+	(*CreateAddressRequest)(nil),        // 11: dapplink.CreateAddressRequest
+	(*CreateAddressResponse)(nil),       // 12: dapplink.CreateAddressResponse
+	(common.ReturnCode)(0),              // 13: dapplink.ReturnCode
+	(*common.PublicKey)(nil),            // 14: dapplink.PublicKey
 }
 var file_dapplink_wallerpcservice_proto_depIdxs = []int32{
-	11, // 0: dapplink.BusinessRegisterResponse.Code:type_name -> dapplink.ReturnCode
-	12, // 1: dapplink.ExportAddressesRequest.public_keys:type_name -> dapplink.PublicKey
-	11, // 2: dapplink.ExportAddressesResponse.Code:type_name -> dapplink.ReturnCode
+	13, // 0: dapplink.BusinessRegisterResponse.Code:type_name -> dapplink.ReturnCode
+	14, // 1: dapplink.ExportAddressesRequest.public_keys:type_name -> dapplink.PublicKey
+	13, // 2: dapplink.ExportAddressesResponse.Code:type_name -> dapplink.ReturnCode
 	0,  // 3: dapplink.ExportAddressesResponse.addresses:type_name -> dapplink.Address
 	6,  // 4: dapplink.withdrawTransactionRequest.withdraw_txn:type_name -> dapplink.WithdrawTxn
-	11, // 5: dapplink.withdrawTransactionResponse.code:type_name -> dapplink.ReturnCode
+	13, // 5: dapplink.withdrawTransactionResponse.code:type_name -> dapplink.ReturnCode
 	1,  // 6: dapplink.SetTokenAddressRequest.token_list:type_name -> dapplink.Token
-	11, // 7: dapplink.SetTokenAddressResponse.code:type_name -> dapplink.ReturnCode
-	2,  // 8: dapplink.BusinessMiddleWireServices.businessRegister:input_type -> dapplink.BusinessRegisterRequest
-	9,  // 9: dapplink.BusinessMiddleWireServices.setTokenAddress:input_type -> dapplink.SetTokenAddressRequest
-	4,  // 10: dapplink.BusinessMiddleWireServices.exportAddressesByPublicKeys:input_type -> dapplink.ExportAddressesRequest
-	7,  // 11: dapplink.BusinessMiddleWireServices.withdrawTransaction:input_type -> dapplink.withdrawTransactionRequest
-	3,  // 12: dapplink.BusinessMiddleWireServices.businessRegister:output_type -> dapplink.BusinessRegisterResponse
-	10, // 13: dapplink.BusinessMiddleWireServices.setTokenAddress:output_type -> dapplink.SetTokenAddressResponse
-	5,  // 14: dapplink.BusinessMiddleWireServices.exportAddressesByPublicKeys:output_type -> dapplink.ExportAddressesResponse
-	8,  // 15: dapplink.BusinessMiddleWireServices.withdrawTransaction:output_type -> dapplink.withdrawTransactionResponse
-	12, // [12:16] is the sub-list for method output_type
-	8,  // [8:12] is the sub-list for method input_type
-	8,  // [8:8] is the sub-list for extension type_name
-	8,  // [8:8] is the sub-list for extension extendee
-	0,  // [0:8] is the sub-list for field type_name
+	13, // 7: dapplink.SetTokenAddressResponse.code:type_name -> dapplink.ReturnCode
+	13, // 8: dapplink.CreateAddressResponse.code:type_name -> dapplink.ReturnCode
+	2,  // 9: dapplink.BusinessMiddleWireServices.businessRegister:input_type -> dapplink.BusinessRegisterRequest
+	9,  // 10: dapplink.BusinessMiddleWireServices.setTokenAddress:input_type -> dapplink.SetTokenAddressRequest
+	4,  // 11: dapplink.BusinessMiddleWireServices.exportAddressesByPublicKeys:input_type -> dapplink.ExportAddressesRequest
+	7,  // 12: dapplink.BusinessMiddleWireServices.withdrawTransaction:input_type -> dapplink.withdrawTransactionRequest
+	11, // 13: dapplink.BusinessMiddleWireServices.createOneAddress:input_type -> dapplink.CreateAddressRequest
+	3,  // 14: dapplink.BusinessMiddleWireServices.businessRegister:output_type -> dapplink.BusinessRegisterResponse
+	10, // 15: dapplink.BusinessMiddleWireServices.setTokenAddress:output_type -> dapplink.SetTokenAddressResponse
+	5,  // 16: dapplink.BusinessMiddleWireServices.exportAddressesByPublicKeys:output_type -> dapplink.ExportAddressesResponse
+	8,  // 17: dapplink.BusinessMiddleWireServices.withdrawTransaction:output_type -> dapplink.withdrawTransactionResponse
+	12, // 18: dapplink.BusinessMiddleWireServices.createOneAddress:output_type -> dapplink.CreateAddressResponse
+	14, // [14:19] is the sub-list for method output_type
+	9,  // [9:14] is the sub-list for method input_type
+	9,  // [9:9] is the sub-list for extension type_name
+	9,  // [9:9] is the sub-list for extension extendee
+	0,  // [0:9] is the sub-list for field type_name
 }
 
 func init() { file_dapplink_wallerpcservice_proto_init() }
@@ -820,7 +964,7 @@ func file_dapplink_wallerpcservice_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_dapplink_wallerpcservice_proto_rawDesc), len(file_dapplink_wallerpcservice_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   11,
+			NumMessages:   13,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

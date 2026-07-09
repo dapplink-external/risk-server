@@ -7,7 +7,7 @@
 package walletapi
 
 import (
-	"github.com/the-web3/mock-risk-server/protobuf/common"
+	common "../protobuf/common"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	reflect "reflect"
@@ -349,6 +349,7 @@ type Addresses struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Address       string                 `protobuf:"bytes,1,opt,name=address,proto3" json:"address,omitempty"`
 	PublicKey     string                 `protobuf:"bytes,2,opt,name=public_key,json=publicKey,proto3" json:"public_key,omitempty"`
+	Type          string                 `protobuf:"bytes,3,opt,name=type,proto3" json:"type,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -393,6 +394,13 @@ func (x *Addresses) GetAddress() string {
 func (x *Addresses) GetPublicKey() string {
 	if x != nil {
 		return x.PublicKey
+	}
+	return ""
+}
+
+func (x *Addresses) GetType() string {
+	if x != nil {
+		return x.Type
 	}
 	return ""
 }
@@ -536,7 +544,8 @@ func (x *ConvertAddressesResponse) GetAddress() []*Addresses {
 type AddressesValid struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Address       string                 `protobuf:"bytes,1,opt,name=address,proto3" json:"address,omitempty"`
-	Valid         bool                   `protobuf:"varint,2,opt,name=valid,proto3" json:"valid,omitempty"`
+	Type          string                 `protobuf:"bytes,2,opt,name=type,proto3" json:"type,omitempty"`
+	Valid         bool                   `protobuf:"varint,3,opt,name=valid,proto3" json:"valid,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -574,6 +583,13 @@ func (*AddressesValid) Descriptor() ([]byte, []int) {
 func (x *AddressesValid) GetAddress() string {
 	if x != nil {
 		return x.Address
+	}
+	return ""
+}
+
+func (x *AddressesValid) GetType() string {
+	if x != nil {
+		return x.Type
 	}
 	return ""
 }
@@ -988,6 +1004,8 @@ type TransactionList struct {
 	To              []*ToAddress           `protobuf:"bytes,7,rep,name=to,proto3" json:"to,omitempty"`
 	BlockHash       string                 `protobuf:"bytes,8,opt,name=block_hash,json=blockHash,proto3" json:"block_hash,omitempty"`
 	BlockHeight     uint64                 `protobuf:"varint,9,opt,name=block_height,json=blockHeight,proto3" json:"block_height,omitempty"`
+	LogIndex        uint32                 `protobuf:"varint,10,opt,name=log_index,json=logIndex,proto3" json:"log_index,omitempty"`
+	TransferKind    string                 `protobuf:"bytes,11,opt,name=transfer_kind,json=transferKind,proto3" json:"transfer_kind,omitempty"`
 	unknownFields   protoimpl.UnknownFields
 	sizeCache       protoimpl.SizeCache
 }
@@ -1085,6 +1103,20 @@ func (x *TransactionList) GetBlockHeight() uint64 {
 	return 0
 }
 
+func (x *TransactionList) GetLogIndex() uint32 {
+	if x != nil {
+		return x.LogIndex
+	}
+	return 0
+}
+
+func (x *TransactionList) GetTransferKind() string {
+	if x != nil {
+		return x.TransferKind
+	}
+	return ""
+}
+
 type BlockRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	ConsumerToken string                 `protobuf:"bytes,1,opt,name=consumer_token,json=consumerToken,proto3" json:"consumer_token,omitempty"`
@@ -1161,6 +1193,158 @@ func (x *BlockRequest) GetIsBlockHash() bool {
 	return false
 }
 
+type BlockHeaderInfo struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Height        string                 `protobuf:"bytes,1,opt,name=height,proto3" json:"height,omitempty"`
+	Hash          string                 `protobuf:"bytes,2,opt,name=hash,proto3" json:"hash,omitempty"`
+	ParentHash    string                 `protobuf:"bytes,3,opt,name=parent_hash,json=parentHash,proto3" json:"parent_hash,omitempty"`
+	Timestamp     uint64                 `protobuf:"varint,4,opt,name=timestamp,proto3" json:"timestamp,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *BlockHeaderInfo) Reset() {
+	*x = BlockHeaderInfo{}
+	mi := &file_dapplink_walletapi_proto_msgTypes[17]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *BlockHeaderInfo) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*BlockHeaderInfo) ProtoMessage() {}
+
+func (x *BlockHeaderInfo) ProtoReflect() protoreflect.Message {
+	mi := &file_dapplink_walletapi_proto_msgTypes[17]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use BlockHeaderInfo.ProtoReflect.Descriptor instead.
+func (*BlockHeaderInfo) Descriptor() ([]byte, []int) {
+	return file_dapplink_walletapi_proto_rawDescGZIP(), []int{17}
+}
+
+func (x *BlockHeaderInfo) GetHeight() string {
+	if x != nil {
+		return x.Height
+	}
+	return ""
+}
+
+func (x *BlockHeaderInfo) GetHash() string {
+	if x != nil {
+		return x.Hash
+	}
+	return ""
+}
+
+func (x *BlockHeaderInfo) GetParentHash() string {
+	if x != nil {
+		return x.ParentHash
+	}
+	return ""
+}
+
+func (x *BlockHeaderInfo) GetTimestamp() uint64 {
+	if x != nil {
+		return x.Timestamp
+	}
+	return 0
+}
+
+type BatchBlockRequest struct {
+	state            protoimpl.MessageState `protogen:"open.v1"`
+	ConsumerToken    string                 `protobuf:"bytes,1,opt,name=consumer_token,json=consumerToken,proto3" json:"consumer_token,omitempty"`
+	ChainId          string                 `protobuf:"bytes,2,opt,name=chain_id,json=chainId,proto3" json:"chain_id,omitempty"`
+	Network          string                 `protobuf:"bytes,3,opt,name=network,proto3" json:"network,omitempty"`
+	NextHeight       string                 `protobuf:"bytes,4,opt,name=next_height,json=nextHeight,proto3" json:"next_height,omitempty"`
+	EndHeight        string                 `protobuf:"bytes,5,opt,name=end_height,json=endHeight,proto3" json:"end_height,omitempty"`
+	WithTransactions bool                   `protobuf:"varint,6,opt,name=with_transactions,json=withTransactions,proto3" json:"with_transactions,omitempty"`
+	unknownFields    protoimpl.UnknownFields
+	sizeCache        protoimpl.SizeCache
+}
+
+func (x *BatchBlockRequest) Reset() {
+	*x = BatchBlockRequest{}
+	mi := &file_dapplink_walletapi_proto_msgTypes[18]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *BatchBlockRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*BatchBlockRequest) ProtoMessage() {}
+
+func (x *BatchBlockRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_dapplink_walletapi_proto_msgTypes[18]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use BatchBlockRequest.ProtoReflect.Descriptor instead.
+func (*BatchBlockRequest) Descriptor() ([]byte, []int) {
+	return file_dapplink_walletapi_proto_rawDescGZIP(), []int{18}
+}
+
+func (x *BatchBlockRequest) GetConsumerToken() string {
+	if x != nil {
+		return x.ConsumerToken
+	}
+	return ""
+}
+
+func (x *BatchBlockRequest) GetChainId() string {
+	if x != nil {
+		return x.ChainId
+	}
+	return ""
+}
+
+func (x *BatchBlockRequest) GetNetwork() string {
+	if x != nil {
+		return x.Network
+	}
+	return ""
+}
+
+func (x *BatchBlockRequest) GetNextHeight() string {
+	if x != nil {
+		return x.NextHeight
+	}
+	return ""
+}
+
+func (x *BatchBlockRequest) GetEndHeight() string {
+	if x != nil {
+		return x.EndHeight
+	}
+	return ""
+}
+
+func (x *BatchBlockRequest) GetWithTransactions() bool {
+	if x != nil {
+		return x.WithTransactions
+	}
+	return false
+}
+
 type BlockResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Code          common.ReturnCode      `protobuf:"varint,1,opt,name=code,proto3,enum=dapplink.ReturnCode" json:"code,omitempty"`
@@ -1176,7 +1360,7 @@ type BlockResponse struct {
 
 func (x *BlockResponse) Reset() {
 	*x = BlockResponse{}
-	mi := &file_dapplink_walletapi_proto_msgTypes[17]
+	mi := &file_dapplink_walletapi_proto_msgTypes[19]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1188,7 +1372,7 @@ func (x *BlockResponse) String() string {
 func (*BlockResponse) ProtoMessage() {}
 
 func (x *BlockResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_dapplink_walletapi_proto_msgTypes[17]
+	mi := &file_dapplink_walletapi_proto_msgTypes[19]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1201,7 +1385,7 @@ func (x *BlockResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use BlockResponse.ProtoReflect.Descriptor instead.
 func (*BlockResponse) Descriptor() ([]byte, []int) {
-	return file_dapplink_walletapi_proto_rawDescGZIP(), []int{17}
+	return file_dapplink_walletapi_proto_rawDescGZIP(), []int{19}
 }
 
 func (x *BlockResponse) GetCode() common.ReturnCode {
@@ -1253,6 +1437,150 @@ func (x *BlockResponse) GetTransactions() []*TransactionList {
 	return nil
 }
 
+type BlockWithTransactions struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Height        string                 `protobuf:"bytes,1,opt,name=height,proto3" json:"height,omitempty"`
+	Hash          string                 `protobuf:"bytes,2,opt,name=hash,proto3" json:"hash,omitempty"`
+	ParentHash    string                 `protobuf:"bytes,3,opt,name=parent_hash,json=parentHash,proto3" json:"parent_hash,omitempty"`
+	Timestamp     uint64                 `protobuf:"varint,4,opt,name=timestamp,proto3" json:"timestamp,omitempty"`
+	Transactions  []*TransactionList     `protobuf:"bytes,5,rep,name=transactions,proto3" json:"transactions,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *BlockWithTransactions) Reset() {
+	*x = BlockWithTransactions{}
+	mi := &file_dapplink_walletapi_proto_msgTypes[20]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *BlockWithTransactions) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*BlockWithTransactions) ProtoMessage() {}
+
+func (x *BlockWithTransactions) ProtoReflect() protoreflect.Message {
+	mi := &file_dapplink_walletapi_proto_msgTypes[20]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use BlockWithTransactions.ProtoReflect.Descriptor instead.
+func (*BlockWithTransactions) Descriptor() ([]byte, []int) {
+	return file_dapplink_walletapi_proto_rawDescGZIP(), []int{20}
+}
+
+func (x *BlockWithTransactions) GetHeight() string {
+	if x != nil {
+		return x.Height
+	}
+	return ""
+}
+
+func (x *BlockWithTransactions) GetHash() string {
+	if x != nil {
+		return x.Hash
+	}
+	return ""
+}
+
+func (x *BlockWithTransactions) GetParentHash() string {
+	if x != nil {
+		return x.ParentHash
+	}
+	return ""
+}
+
+func (x *BlockWithTransactions) GetTimestamp() uint64 {
+	if x != nil {
+		return x.Timestamp
+	}
+	return 0
+}
+
+func (x *BlockWithTransactions) GetTransactions() []*TransactionList {
+	if x != nil {
+		return x.Transactions
+	}
+	return nil
+}
+
+type BatchBlockResponse struct {
+	state         protoimpl.MessageState   `protogen:"open.v1"`
+	Code          common.ReturnCode        `protobuf:"varint,1,opt,name=code,proto3,enum=dapplink.ReturnCode" json:"code,omitempty"`
+	Msg           string                   `protobuf:"bytes,2,opt,name=msg,proto3" json:"msg,omitempty"`
+	Headers       []*BlockHeaderInfo       `protobuf:"bytes,3,rep,name=headers,proto3" json:"headers,omitempty"`
+	Blocks        []*BlockWithTransactions `protobuf:"bytes,4,rep,name=blocks,proto3" json:"blocks,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *BatchBlockResponse) Reset() {
+	*x = BatchBlockResponse{}
+	mi := &file_dapplink_walletapi_proto_msgTypes[21]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *BatchBlockResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*BatchBlockResponse) ProtoMessage() {}
+
+func (x *BatchBlockResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_dapplink_walletapi_proto_msgTypes[21]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use BatchBlockResponse.ProtoReflect.Descriptor instead.
+func (*BatchBlockResponse) Descriptor() ([]byte, []int) {
+	return file_dapplink_walletapi_proto_rawDescGZIP(), []int{21}
+}
+
+func (x *BatchBlockResponse) GetCode() common.ReturnCode {
+	if x != nil {
+		return x.Code
+	}
+	return common.ReturnCode(0)
+}
+
+func (x *BatchBlockResponse) GetMsg() string {
+	if x != nil {
+		return x.Msg
+	}
+	return ""
+}
+
+func (x *BatchBlockResponse) GetHeaders() []*BlockHeaderInfo {
+	if x != nil {
+		return x.Headers
+	}
+	return nil
+}
+
+func (x *BatchBlockResponse) GetBlocks() []*BlockWithTransactions {
+	if x != nil {
+		return x.Blocks
+	}
+	return nil
+}
+
 type TransactionByHashRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	ConsumerToken string                 `protobuf:"bytes,1,opt,name=consumer_token,json=consumerToken,proto3" json:"consumer_token,omitempty"`
@@ -1265,7 +1593,7 @@ type TransactionByHashRequest struct {
 
 func (x *TransactionByHashRequest) Reset() {
 	*x = TransactionByHashRequest{}
-	mi := &file_dapplink_walletapi_proto_msgTypes[18]
+	mi := &file_dapplink_walletapi_proto_msgTypes[22]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1277,7 +1605,7 @@ func (x *TransactionByHashRequest) String() string {
 func (*TransactionByHashRequest) ProtoMessage() {}
 
 func (x *TransactionByHashRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_dapplink_walletapi_proto_msgTypes[18]
+	mi := &file_dapplink_walletapi_proto_msgTypes[22]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1290,7 +1618,7 @@ func (x *TransactionByHashRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use TransactionByHashRequest.ProtoReflect.Descriptor instead.
 func (*TransactionByHashRequest) Descriptor() ([]byte, []int) {
-	return file_dapplink_walletapi_proto_rawDescGZIP(), []int{18}
+	return file_dapplink_walletapi_proto_rawDescGZIP(), []int{22}
 }
 
 func (x *TransactionByHashRequest) GetConsumerToken() string {
@@ -1332,7 +1660,7 @@ type TransactionByHashResponse struct {
 
 func (x *TransactionByHashResponse) Reset() {
 	*x = TransactionByHashResponse{}
-	mi := &file_dapplink_walletapi_proto_msgTypes[19]
+	mi := &file_dapplink_walletapi_proto_msgTypes[23]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1344,7 +1672,7 @@ func (x *TransactionByHashResponse) String() string {
 func (*TransactionByHashResponse) ProtoMessage() {}
 
 func (x *TransactionByHashResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_dapplink_walletapi_proto_msgTypes[19]
+	mi := &file_dapplink_walletapi_proto_msgTypes[23]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1357,7 +1685,7 @@ func (x *TransactionByHashResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use TransactionByHashResponse.ProtoReflect.Descriptor instead.
 func (*TransactionByHashResponse) Descriptor() ([]byte, []int) {
-	return file_dapplink_walletapi_proto_rawDescGZIP(), []int{19}
+	return file_dapplink_walletapi_proto_rawDescGZIP(), []int{23}
 }
 
 func (x *TransactionByHashResponse) GetCode() common.ReturnCode {
@@ -1396,7 +1724,7 @@ type TransactionByAddressRequest struct {
 
 func (x *TransactionByAddressRequest) Reset() {
 	*x = TransactionByAddressRequest{}
-	mi := &file_dapplink_walletapi_proto_msgTypes[20]
+	mi := &file_dapplink_walletapi_proto_msgTypes[24]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1408,7 +1736,7 @@ func (x *TransactionByAddressRequest) String() string {
 func (*TransactionByAddressRequest) ProtoMessage() {}
 
 func (x *TransactionByAddressRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_dapplink_walletapi_proto_msgTypes[20]
+	mi := &file_dapplink_walletapi_proto_msgTypes[24]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1421,7 +1749,7 @@ func (x *TransactionByAddressRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use TransactionByAddressRequest.ProtoReflect.Descriptor instead.
 func (*TransactionByAddressRequest) Descriptor() ([]byte, []int) {
-	return file_dapplink_walletapi_proto_rawDescGZIP(), []int{20}
+	return file_dapplink_walletapi_proto_rawDescGZIP(), []int{24}
 }
 
 func (x *TransactionByAddressRequest) GetConsumerToken() string {
@@ -1484,7 +1812,7 @@ type TransactionByAddressResponse struct {
 
 func (x *TransactionByAddressResponse) Reset() {
 	*x = TransactionByAddressResponse{}
-	mi := &file_dapplink_walletapi_proto_msgTypes[21]
+	mi := &file_dapplink_walletapi_proto_msgTypes[25]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1496,7 +1824,7 @@ func (x *TransactionByAddressResponse) String() string {
 func (*TransactionByAddressResponse) ProtoMessage() {}
 
 func (x *TransactionByAddressResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_dapplink_walletapi_proto_msgTypes[21]
+	mi := &file_dapplink_walletapi_proto_msgTypes[25]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1509,7 +1837,7 @@ func (x *TransactionByAddressResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use TransactionByAddressResponse.ProtoReflect.Descriptor instead.
 func (*TransactionByAddressResponse) Descriptor() ([]byte, []int) {
-	return file_dapplink_walletapi_proto_rawDescGZIP(), []int{21}
+	return file_dapplink_walletapi_proto_rawDescGZIP(), []int{25}
 }
 
 func (x *TransactionByAddressResponse) GetCode() common.ReturnCode {
@@ -1546,7 +1874,7 @@ type AccountBalanceRequest struct {
 
 func (x *AccountBalanceRequest) Reset() {
 	*x = AccountBalanceRequest{}
-	mi := &file_dapplink_walletapi_proto_msgTypes[22]
+	mi := &file_dapplink_walletapi_proto_msgTypes[26]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1558,7 +1886,7 @@ func (x *AccountBalanceRequest) String() string {
 func (*AccountBalanceRequest) ProtoMessage() {}
 
 func (x *AccountBalanceRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_dapplink_walletapi_proto_msgTypes[22]
+	mi := &file_dapplink_walletapi_proto_msgTypes[26]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1571,7 +1899,7 @@ func (x *AccountBalanceRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use AccountBalanceRequest.ProtoReflect.Descriptor instead.
 func (*AccountBalanceRequest) Descriptor() ([]byte, []int) {
-	return file_dapplink_walletapi_proto_rawDescGZIP(), []int{22}
+	return file_dapplink_walletapi_proto_rawDescGZIP(), []int{26}
 }
 
 func (x *AccountBalanceRequest) GetConsumerToken() string {
@@ -1621,7 +1949,7 @@ type AccountBalanceResponse struct {
 
 func (x *AccountBalanceResponse) Reset() {
 	*x = AccountBalanceResponse{}
-	mi := &file_dapplink_walletapi_proto_msgTypes[23]
+	mi := &file_dapplink_walletapi_proto_msgTypes[27]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1633,7 +1961,7 @@ func (x *AccountBalanceResponse) String() string {
 func (*AccountBalanceResponse) ProtoMessage() {}
 
 func (x *AccountBalanceResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_dapplink_walletapi_proto_msgTypes[23]
+	mi := &file_dapplink_walletapi_proto_msgTypes[27]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1646,7 +1974,7 @@ func (x *AccountBalanceResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use AccountBalanceResponse.ProtoReflect.Descriptor instead.
 func (*AccountBalanceResponse) Descriptor() ([]byte, []int) {
-	return file_dapplink_walletapi_proto_rawDescGZIP(), []int{23}
+	return file_dapplink_walletapi_proto_rawDescGZIP(), []int{27}
 }
 
 func (x *AccountBalanceResponse) GetCode() common.ReturnCode {
@@ -1686,7 +2014,7 @@ type RawTransaction struct {
 
 func (x *RawTransaction) Reset() {
 	*x = RawTransaction{}
-	mi := &file_dapplink_walletapi_proto_msgTypes[24]
+	mi := &file_dapplink_walletapi_proto_msgTypes[28]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1698,7 +2026,7 @@ func (x *RawTransaction) String() string {
 func (*RawTransaction) ProtoMessage() {}
 
 func (x *RawTransaction) ProtoReflect() protoreflect.Message {
-	mi := &file_dapplink_walletapi_proto_msgTypes[24]
+	mi := &file_dapplink_walletapi_proto_msgTypes[28]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1711,7 +2039,7 @@ func (x *RawTransaction) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use RawTransaction.ProtoReflect.Descriptor instead.
 func (*RawTransaction) Descriptor() ([]byte, []int) {
-	return file_dapplink_walletapi_proto_rawDescGZIP(), []int{24}
+	return file_dapplink_walletapi_proto_rawDescGZIP(), []int{28}
 }
 
 func (x *RawTransaction) GetRawTx() string {
@@ -1733,7 +2061,7 @@ type SendTransactionsRequest struct {
 
 func (x *SendTransactionsRequest) Reset() {
 	*x = SendTransactionsRequest{}
-	mi := &file_dapplink_walletapi_proto_msgTypes[25]
+	mi := &file_dapplink_walletapi_proto_msgTypes[29]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1745,7 +2073,7 @@ func (x *SendTransactionsRequest) String() string {
 func (*SendTransactionsRequest) ProtoMessage() {}
 
 func (x *SendTransactionsRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_dapplink_walletapi_proto_msgTypes[25]
+	mi := &file_dapplink_walletapi_proto_msgTypes[29]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1758,7 +2086,7 @@ func (x *SendTransactionsRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SendTransactionsRequest.ProtoReflect.Descriptor instead.
 func (*SendTransactionsRequest) Descriptor() ([]byte, []int) {
-	return file_dapplink_walletapi_proto_rawDescGZIP(), []int{25}
+	return file_dapplink_walletapi_proto_rawDescGZIP(), []int{29}
 }
 
 func (x *SendTransactionsRequest) GetConsumerToken() string {
@@ -1800,7 +2128,7 @@ type RawTransactionReturn struct {
 
 func (x *RawTransactionReturn) Reset() {
 	*x = RawTransactionReturn{}
-	mi := &file_dapplink_walletapi_proto_msgTypes[26]
+	mi := &file_dapplink_walletapi_proto_msgTypes[30]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1812,7 +2140,7 @@ func (x *RawTransactionReturn) String() string {
 func (*RawTransactionReturn) ProtoMessage() {}
 
 func (x *RawTransactionReturn) ProtoReflect() protoreflect.Message {
-	mi := &file_dapplink_walletapi_proto_msgTypes[26]
+	mi := &file_dapplink_walletapi_proto_msgTypes[30]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1825,7 +2153,7 @@ func (x *RawTransactionReturn) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use RawTransactionReturn.ProtoReflect.Descriptor instead.
 func (*RawTransactionReturn) Descriptor() ([]byte, []int) {
-	return file_dapplink_walletapi_proto_rawDescGZIP(), []int{26}
+	return file_dapplink_walletapi_proto_rawDescGZIP(), []int{30}
 }
 
 func (x *RawTransactionReturn) GetTxHash() string {
@@ -1860,7 +2188,7 @@ type SendTransactionResponse struct {
 
 func (x *SendTransactionResponse) Reset() {
 	*x = SendTransactionResponse{}
-	mi := &file_dapplink_walletapi_proto_msgTypes[27]
+	mi := &file_dapplink_walletapi_proto_msgTypes[31]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1872,7 +2200,7 @@ func (x *SendTransactionResponse) String() string {
 func (*SendTransactionResponse) ProtoMessage() {}
 
 func (x *SendTransactionResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_dapplink_walletapi_proto_msgTypes[27]
+	mi := &file_dapplink_walletapi_proto_msgTypes[31]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1885,7 +2213,7 @@ func (x *SendTransactionResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SendTransactionResponse.ProtoReflect.Descriptor instead.
 func (*SendTransactionResponse) Descriptor() ([]byte, []int) {
-	return file_dapplink_walletapi_proto_rawDescGZIP(), []int{27}
+	return file_dapplink_walletapi_proto_rawDescGZIP(), []int{31}
 }
 
 func (x *SendTransactionResponse) GetCode() common.ReturnCode {
@@ -1920,7 +2248,7 @@ type TransactionSchemaRequest struct {
 
 func (x *TransactionSchemaRequest) Reset() {
 	*x = TransactionSchemaRequest{}
-	mi := &file_dapplink_walletapi_proto_msgTypes[28]
+	mi := &file_dapplink_walletapi_proto_msgTypes[32]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1932,7 +2260,7 @@ func (x *TransactionSchemaRequest) String() string {
 func (*TransactionSchemaRequest) ProtoMessage() {}
 
 func (x *TransactionSchemaRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_dapplink_walletapi_proto_msgTypes[28]
+	mi := &file_dapplink_walletapi_proto_msgTypes[32]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1945,7 +2273,7 @@ func (x *TransactionSchemaRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use TransactionSchemaRequest.ProtoReflect.Descriptor instead.
 func (*TransactionSchemaRequest) Descriptor() ([]byte, []int) {
-	return file_dapplink_walletapi_proto_rawDescGZIP(), []int{28}
+	return file_dapplink_walletapi_proto_rawDescGZIP(), []int{32}
 }
 
 func (x *TransactionSchemaRequest) GetConsumerToken() string {
@@ -1980,7 +2308,7 @@ type TransactionSchemaResponse struct {
 
 func (x *TransactionSchemaResponse) Reset() {
 	*x = TransactionSchemaResponse{}
-	mi := &file_dapplink_walletapi_proto_msgTypes[29]
+	mi := &file_dapplink_walletapi_proto_msgTypes[33]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1992,7 +2320,7 @@ func (x *TransactionSchemaResponse) String() string {
 func (*TransactionSchemaResponse) ProtoMessage() {}
 
 func (x *TransactionSchemaResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_dapplink_walletapi_proto_msgTypes[29]
+	mi := &file_dapplink_walletapi_proto_msgTypes[33]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2005,7 +2333,7 @@ func (x *TransactionSchemaResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use TransactionSchemaResponse.ProtoReflect.Descriptor instead.
 func (*TransactionSchemaResponse) Descriptor() ([]byte, []int) {
-	return file_dapplink_walletapi_proto_rawDescGZIP(), []int{29}
+	return file_dapplink_walletapi_proto_rawDescGZIP(), []int{33}
 }
 
 func (x *TransactionSchemaResponse) GetCode() common.ReturnCode {
@@ -2038,7 +2366,7 @@ type Base64Transaction struct {
 
 func (x *Base64Transaction) Reset() {
 	*x = Base64Transaction{}
-	mi := &file_dapplink_walletapi_proto_msgTypes[30]
+	mi := &file_dapplink_walletapi_proto_msgTypes[34]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2050,7 +2378,7 @@ func (x *Base64Transaction) String() string {
 func (*Base64Transaction) ProtoMessage() {}
 
 func (x *Base64Transaction) ProtoReflect() protoreflect.Message {
-	mi := &file_dapplink_walletapi_proto_msgTypes[30]
+	mi := &file_dapplink_walletapi_proto_msgTypes[34]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2063,7 +2391,7 @@ func (x *Base64Transaction) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Base64Transaction.ProtoReflect.Descriptor instead.
 func (*Base64Transaction) Descriptor() ([]byte, []int) {
-	return file_dapplink_walletapi_proto_rawDescGZIP(), []int{30}
+	return file_dapplink_walletapi_proto_rawDescGZIP(), []int{34}
 }
 
 func (x *Base64Transaction) GetBase64Tx() string {
@@ -2082,7 +2410,7 @@ type UnsignedTransactionMessageHash struct {
 
 func (x *UnsignedTransactionMessageHash) Reset() {
 	*x = UnsignedTransactionMessageHash{}
-	mi := &file_dapplink_walletapi_proto_msgTypes[31]
+	mi := &file_dapplink_walletapi_proto_msgTypes[35]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2094,7 +2422,7 @@ func (x *UnsignedTransactionMessageHash) String() string {
 func (*UnsignedTransactionMessageHash) ProtoMessage() {}
 
 func (x *UnsignedTransactionMessageHash) ProtoReflect() protoreflect.Message {
-	mi := &file_dapplink_walletapi_proto_msgTypes[31]
+	mi := &file_dapplink_walletapi_proto_msgTypes[35]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2107,7 +2435,7 @@ func (x *UnsignedTransactionMessageHash) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UnsignedTransactionMessageHash.ProtoReflect.Descriptor instead.
 func (*UnsignedTransactionMessageHash) Descriptor() ([]byte, []int) {
-	return file_dapplink_walletapi_proto_rawDescGZIP(), []int{31}
+	return file_dapplink_walletapi_proto_rawDescGZIP(), []int{35}
 }
 
 func (x *UnsignedTransactionMessageHash) GetUnsignedTx() string {
@@ -2129,7 +2457,7 @@ type UnSignTransactionRequest struct {
 
 func (x *UnSignTransactionRequest) Reset() {
 	*x = UnSignTransactionRequest{}
-	mi := &file_dapplink_walletapi_proto_msgTypes[32]
+	mi := &file_dapplink_walletapi_proto_msgTypes[36]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2141,7 +2469,7 @@ func (x *UnSignTransactionRequest) String() string {
 func (*UnSignTransactionRequest) ProtoMessage() {}
 
 func (x *UnSignTransactionRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_dapplink_walletapi_proto_msgTypes[32]
+	mi := &file_dapplink_walletapi_proto_msgTypes[36]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2154,7 +2482,7 @@ func (x *UnSignTransactionRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UnSignTransactionRequest.ProtoReflect.Descriptor instead.
 func (*UnSignTransactionRequest) Descriptor() ([]byte, []int) {
-	return file_dapplink_walletapi_proto_rawDescGZIP(), []int{32}
+	return file_dapplink_walletapi_proto_rawDescGZIP(), []int{36}
 }
 
 func (x *UnSignTransactionRequest) GetConsumerToken() string {
@@ -2196,7 +2524,7 @@ type UnSignTransactionResponse struct {
 
 func (x *UnSignTransactionResponse) Reset() {
 	*x = UnSignTransactionResponse{}
-	mi := &file_dapplink_walletapi_proto_msgTypes[33]
+	mi := &file_dapplink_walletapi_proto_msgTypes[37]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2208,7 +2536,7 @@ func (x *UnSignTransactionResponse) String() string {
 func (*UnSignTransactionResponse) ProtoMessage() {}
 
 func (x *UnSignTransactionResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_dapplink_walletapi_proto_msgTypes[33]
+	mi := &file_dapplink_walletapi_proto_msgTypes[37]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2221,7 +2549,7 @@ func (x *UnSignTransactionResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UnSignTransactionResponse.ProtoReflect.Descriptor instead.
 func (*UnSignTransactionResponse) Descriptor() ([]byte, []int) {
-	return file_dapplink_walletapi_proto_rawDescGZIP(), []int{33}
+	return file_dapplink_walletapi_proto_rawDescGZIP(), []int{37}
 }
 
 func (x *UnSignTransactionResponse) GetCode() common.ReturnCode {
@@ -2256,7 +2584,7 @@ type Base64TransactionWithSignature struct {
 
 func (x *Base64TransactionWithSignature) Reset() {
 	*x = Base64TransactionWithSignature{}
-	mi := &file_dapplink_walletapi_proto_msgTypes[34]
+	mi := &file_dapplink_walletapi_proto_msgTypes[38]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2268,7 +2596,7 @@ func (x *Base64TransactionWithSignature) String() string {
 func (*Base64TransactionWithSignature) ProtoMessage() {}
 
 func (x *Base64TransactionWithSignature) ProtoReflect() protoreflect.Message {
-	mi := &file_dapplink_walletapi_proto_msgTypes[34]
+	mi := &file_dapplink_walletapi_proto_msgTypes[38]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2281,7 +2609,7 @@ func (x *Base64TransactionWithSignature) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Base64TransactionWithSignature.ProtoReflect.Descriptor instead.
 func (*Base64TransactionWithSignature) Descriptor() ([]byte, []int) {
-	return file_dapplink_walletapi_proto_rawDescGZIP(), []int{34}
+	return file_dapplink_walletapi_proto_rawDescGZIP(), []int{38}
 }
 
 func (x *Base64TransactionWithSignature) GetBase64Tx() string {
@@ -2316,7 +2644,7 @@ type SignedTxWithHash struct {
 
 func (x *SignedTxWithHash) Reset() {
 	*x = SignedTxWithHash{}
-	mi := &file_dapplink_walletapi_proto_msgTypes[35]
+	mi := &file_dapplink_walletapi_proto_msgTypes[39]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2328,7 +2656,7 @@ func (x *SignedTxWithHash) String() string {
 func (*SignedTxWithHash) ProtoMessage() {}
 
 func (x *SignedTxWithHash) ProtoReflect() protoreflect.Message {
-	mi := &file_dapplink_walletapi_proto_msgTypes[35]
+	mi := &file_dapplink_walletapi_proto_msgTypes[39]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2341,7 +2669,7 @@ func (x *SignedTxWithHash) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SignedTxWithHash.ProtoReflect.Descriptor instead.
 func (*SignedTxWithHash) Descriptor() ([]byte, []int) {
-	return file_dapplink_walletapi_proto_rawDescGZIP(), []int{35}
+	return file_dapplink_walletapi_proto_rawDescGZIP(), []int{39}
 }
 
 func (x *SignedTxWithHash) GetSignedTx() string {
@@ -2377,7 +2705,7 @@ type SignedTransactionRequest struct {
 
 func (x *SignedTransactionRequest) Reset() {
 	*x = SignedTransactionRequest{}
-	mi := &file_dapplink_walletapi_proto_msgTypes[36]
+	mi := &file_dapplink_walletapi_proto_msgTypes[40]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2389,7 +2717,7 @@ func (x *SignedTransactionRequest) String() string {
 func (*SignedTransactionRequest) ProtoMessage() {}
 
 func (x *SignedTransactionRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_dapplink_walletapi_proto_msgTypes[36]
+	mi := &file_dapplink_walletapi_proto_msgTypes[40]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2402,7 +2730,7 @@ func (x *SignedTransactionRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SignedTransactionRequest.ProtoReflect.Descriptor instead.
 func (*SignedTransactionRequest) Descriptor() ([]byte, []int) {
-	return file_dapplink_walletapi_proto_rawDescGZIP(), []int{36}
+	return file_dapplink_walletapi_proto_rawDescGZIP(), []int{40}
 }
 
 func (x *SignedTransactionRequest) GetConsumerToken() string {
@@ -2444,7 +2772,7 @@ type SignedTransactionResponse struct {
 
 func (x *SignedTransactionResponse) Reset() {
 	*x = SignedTransactionResponse{}
-	mi := &file_dapplink_walletapi_proto_msgTypes[37]
+	mi := &file_dapplink_walletapi_proto_msgTypes[41]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2456,7 +2784,7 @@ func (x *SignedTransactionResponse) String() string {
 func (*SignedTransactionResponse) ProtoMessage() {}
 
 func (x *SignedTransactionResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_dapplink_walletapi_proto_msgTypes[37]
+	mi := &file_dapplink_walletapi_proto_msgTypes[41]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2469,7 +2797,7 @@ func (x *SignedTransactionResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SignedTransactionResponse.ProtoReflect.Descriptor instead.
 func (*SignedTransactionResponse) Descriptor() ([]byte, []int) {
-	return file_dapplink_walletapi_proto_rawDescGZIP(), []int{37}
+	return file_dapplink_walletapi_proto_rawDescGZIP(), []int{41}
 }
 
 func (x *SignedTransactionResponse) GetCode() common.ReturnCode {
@@ -2502,7 +2830,7 @@ type ApproveContractList struct {
 
 func (x *ApproveContractList) Reset() {
 	*x = ApproveContractList{}
-	mi := &file_dapplink_walletapi_proto_msgTypes[38]
+	mi := &file_dapplink_walletapi_proto_msgTypes[42]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2514,7 +2842,7 @@ func (x *ApproveContractList) String() string {
 func (*ApproveContractList) ProtoMessage() {}
 
 func (x *ApproveContractList) ProtoReflect() protoreflect.Message {
-	mi := &file_dapplink_walletapi_proto_msgTypes[38]
+	mi := &file_dapplink_walletapi_proto_msgTypes[42]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2527,7 +2855,7 @@ func (x *ApproveContractList) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ApproveContractList.ProtoReflect.Descriptor instead.
 func (*ApproveContractList) Descriptor() ([]byte, []int) {
-	return file_dapplink_walletapi_proto_rawDescGZIP(), []int{38}
+	return file_dapplink_walletapi_proto_rawDescGZIP(), []int{42}
 }
 
 func (x *ApproveContractList) GetAddress() string {
@@ -2549,7 +2877,7 @@ type AddressApproveListRequest struct {
 
 func (x *AddressApproveListRequest) Reset() {
 	*x = AddressApproveListRequest{}
-	mi := &file_dapplink_walletapi_proto_msgTypes[39]
+	mi := &file_dapplink_walletapi_proto_msgTypes[43]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2561,7 +2889,7 @@ func (x *AddressApproveListRequest) String() string {
 func (*AddressApproveListRequest) ProtoMessage() {}
 
 func (x *AddressApproveListRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_dapplink_walletapi_proto_msgTypes[39]
+	mi := &file_dapplink_walletapi_proto_msgTypes[43]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2574,7 +2902,7 @@ func (x *AddressApproveListRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use AddressApproveListRequest.ProtoReflect.Descriptor instead.
 func (*AddressApproveListRequest) Descriptor() ([]byte, []int) {
-	return file_dapplink_walletapi_proto_rawDescGZIP(), []int{39}
+	return file_dapplink_walletapi_proto_rawDescGZIP(), []int{43}
 }
 
 func (x *AddressApproveListRequest) GetConsumerToken() string {
@@ -2616,7 +2944,7 @@ type AddressApproveListResponse struct {
 
 func (x *AddressApproveListResponse) Reset() {
 	*x = AddressApproveListResponse{}
-	mi := &file_dapplink_walletapi_proto_msgTypes[40]
+	mi := &file_dapplink_walletapi_proto_msgTypes[44]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2628,7 +2956,7 @@ func (x *AddressApproveListResponse) String() string {
 func (*AddressApproveListResponse) ProtoMessage() {}
 
 func (x *AddressApproveListResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_dapplink_walletapi_proto_msgTypes[40]
+	mi := &file_dapplink_walletapi_proto_msgTypes[44]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2641,7 +2969,7 @@ func (x *AddressApproveListResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use AddressApproveListResponse.ProtoReflect.Descriptor instead.
 func (*AddressApproveListResponse) Descriptor() ([]byte, []int) {
-	return file_dapplink_walletapi_proto_rawDescGZIP(), []int{40}
+	return file_dapplink_walletapi_proto_rawDescGZIP(), []int{44}
 }
 
 func (x *AddressApproveListResponse) GetCode() common.ReturnCode {
@@ -2665,6 +2993,266 @@ func (x *AddressApproveListResponse) GetContracts() []*ApproveContractList {
 	return nil
 }
 
+type SponsoredTransferRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	ConsumerToken string                 `protobuf:"bytes,1,opt,name=consumer_token,json=consumerToken,proto3" json:"consumer_token,omitempty"`
+	ChainId       string                 `protobuf:"bytes,2,opt,name=chain_id,json=chainId,proto3" json:"chain_id,omitempty"`
+	Network       string                 `protobuf:"bytes,3,opt,name=network,proto3" json:"network,omitempty"`
+	FromAddress   string                 `protobuf:"bytes,4,opt,name=from_address,json=fromAddress,proto3" json:"from_address,omitempty"`
+	ToAddress     string                 `protobuf:"bytes,5,opt,name=to_address,json=toAddress,proto3" json:"to_address,omitempty"`
+	Amount        string                 `protobuf:"bytes,6,opt,name=amount,proto3" json:"amount,omitempty"`
+	TokenAddress  string                 `protobuf:"bytes,7,opt,name=token_address,json=tokenAddress,proto3" json:"token_address,omitempty"`
+	RequestId     string                 `protobuf:"bytes,8,opt,name=request_id,json=requestId,proto3" json:"request_id,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *SponsoredTransferRequest) Reset() {
+	*x = SponsoredTransferRequest{}
+	mi := &file_dapplink_walletapi_proto_msgTypes[45]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *SponsoredTransferRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*SponsoredTransferRequest) ProtoMessage() {}
+
+func (x *SponsoredTransferRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_dapplink_walletapi_proto_msgTypes[45]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use SponsoredTransferRequest.ProtoReflect.Descriptor instead.
+func (*SponsoredTransferRequest) Descriptor() ([]byte, []int) {
+	return file_dapplink_walletapi_proto_rawDescGZIP(), []int{45}
+}
+
+func (x *SponsoredTransferRequest) GetConsumerToken() string {
+	if x != nil {
+		return x.ConsumerToken
+	}
+	return ""
+}
+
+func (x *SponsoredTransferRequest) GetChainId() string {
+	if x != nil {
+		return x.ChainId
+	}
+	return ""
+}
+
+func (x *SponsoredTransferRequest) GetNetwork() string {
+	if x != nil {
+		return x.Network
+	}
+	return ""
+}
+
+func (x *SponsoredTransferRequest) GetFromAddress() string {
+	if x != nil {
+		return x.FromAddress
+	}
+	return ""
+}
+
+func (x *SponsoredTransferRequest) GetToAddress() string {
+	if x != nil {
+		return x.ToAddress
+	}
+	return ""
+}
+
+func (x *SponsoredTransferRequest) GetAmount() string {
+	if x != nil {
+		return x.Amount
+	}
+	return ""
+}
+
+func (x *SponsoredTransferRequest) GetTokenAddress() string {
+	if x != nil {
+		return x.TokenAddress
+	}
+	return ""
+}
+
+func (x *SponsoredTransferRequest) GetRequestId() string {
+	if x != nil {
+		return x.RequestId
+	}
+	return ""
+}
+
+type SponsoredTransferBuildResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Code          common.ReturnCode      `protobuf:"varint,1,opt,name=code,proto3,enum=dapplink.ReturnCode" json:"code,omitempty"`
+	Msg           string                 `protobuf:"bytes,2,opt,name=msg,proto3" json:"msg,omitempty"`
+	UserOpHash    string                 `protobuf:"bytes,3,opt,name=user_op_hash,json=userOpHash,proto3" json:"user_op_hash,omitempty"`
+	AuthDigest    string                 `protobuf:"bytes,4,opt,name=auth_digest,json=authDigest,proto3" json:"auth_digest,omitempty"`
+	UserOpJson    string                 `protobuf:"bytes,5,opt,name=user_op_json,json=userOpJson,proto3" json:"user_op_json,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *SponsoredTransferBuildResponse) Reset() {
+	*x = SponsoredTransferBuildResponse{}
+	mi := &file_dapplink_walletapi_proto_msgTypes[46]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *SponsoredTransferBuildResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*SponsoredTransferBuildResponse) ProtoMessage() {}
+
+func (x *SponsoredTransferBuildResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_dapplink_walletapi_proto_msgTypes[46]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use SponsoredTransferBuildResponse.ProtoReflect.Descriptor instead.
+func (*SponsoredTransferBuildResponse) Descriptor() ([]byte, []int) {
+	return file_dapplink_walletapi_proto_rawDescGZIP(), []int{46}
+}
+
+func (x *SponsoredTransferBuildResponse) GetCode() common.ReturnCode {
+	if x != nil {
+		return x.Code
+	}
+	return common.ReturnCode(0)
+}
+
+func (x *SponsoredTransferBuildResponse) GetMsg() string {
+	if x != nil {
+		return x.Msg
+	}
+	return ""
+}
+
+func (x *SponsoredTransferBuildResponse) GetUserOpHash() string {
+	if x != nil {
+		return x.UserOpHash
+	}
+	return ""
+}
+
+func (x *SponsoredTransferBuildResponse) GetAuthDigest() string {
+	if x != nil {
+		return x.AuthDigest
+	}
+	return ""
+}
+
+func (x *SponsoredTransferBuildResponse) GetUserOpJson() string {
+	if x != nil {
+		return x.UserOpJson
+	}
+	return ""
+}
+
+type SponsoredTransferSendRequest struct {
+	state           protoimpl.MessageState `protogen:"open.v1"`
+	ConsumerToken   string                 `protobuf:"bytes,1,opt,name=consumer_token,json=consumerToken,proto3" json:"consumer_token,omitempty"`
+	ChainId         string                 `protobuf:"bytes,2,opt,name=chain_id,json=chainId,proto3" json:"chain_id,omitempty"`
+	Network         string                 `protobuf:"bytes,3,opt,name=network,proto3" json:"network,omitempty"`
+	UserOpJson      string                 `protobuf:"bytes,4,opt,name=user_op_json,json=userOpJson,proto3" json:"user_op_json,omitempty"`
+	AuthSignature   string                 `protobuf:"bytes,5,opt,name=auth_signature,json=authSignature,proto3" json:"auth_signature,omitempty"`
+	UserOpSignature string                 `protobuf:"bytes,6,opt,name=user_op_signature,json=userOpSignature,proto3" json:"user_op_signature,omitempty"`
+	unknownFields   protoimpl.UnknownFields
+	sizeCache       protoimpl.SizeCache
+}
+
+func (x *SponsoredTransferSendRequest) Reset() {
+	*x = SponsoredTransferSendRequest{}
+	mi := &file_dapplink_walletapi_proto_msgTypes[47]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *SponsoredTransferSendRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*SponsoredTransferSendRequest) ProtoMessage() {}
+
+func (x *SponsoredTransferSendRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_dapplink_walletapi_proto_msgTypes[47]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use SponsoredTransferSendRequest.ProtoReflect.Descriptor instead.
+func (*SponsoredTransferSendRequest) Descriptor() ([]byte, []int) {
+	return file_dapplink_walletapi_proto_rawDescGZIP(), []int{47}
+}
+
+func (x *SponsoredTransferSendRequest) GetConsumerToken() string {
+	if x != nil {
+		return x.ConsumerToken
+	}
+	return ""
+}
+
+func (x *SponsoredTransferSendRequest) GetChainId() string {
+	if x != nil {
+		return x.ChainId
+	}
+	return ""
+}
+
+func (x *SponsoredTransferSendRequest) GetNetwork() string {
+	if x != nil {
+		return x.Network
+	}
+	return ""
+}
+
+func (x *SponsoredTransferSendRequest) GetUserOpJson() string {
+	if x != nil {
+		return x.UserOpJson
+	}
+	return ""
+}
+
+func (x *SponsoredTransferSendRequest) GetAuthSignature() string {
+	if x != nil {
+		return x.AuthSignature
+	}
+	return ""
+}
+
+func (x *SponsoredTransferSendRequest) GetUserOpSignature() string {
+	if x != nil {
+		return x.UserOpSignature
+	}
+	return ""
+}
+
 var File_dapplink_walletapi_proto protoreflect.FileDescriptor
 
 const file_dapplink_walletapi_proto_rawDesc = "" +
@@ -2686,11 +3274,12 @@ const file_dapplink_walletapi_proto_rawDesc = "" +
 	"\x14SupportChainResponse\x12(\n" +
 	"\x04code\x18\x01 \x01(\x0e2\x14.dapplink.ReturnCodeR\x04code\x12\x10\n" +
 	"\x03msg\x18\x02 \x01(\tR\x03msg\x12.\n" +
-	"\x06chains\x18\x03 \x03(\v2\x16.dapplink.SupportChainR\x06chains\"D\n" +
+	"\x06chains\x18\x03 \x03(\v2\x16.dapplink.SupportChainR\x06chains\"X\n" +
 	"\tAddresses\x12\x18\n" +
 	"\aaddress\x18\x01 \x01(\tR\aaddress\x12\x1d\n" +
 	"\n" +
-	"public_key\x18\x02 \x01(\tR\tpublicKey\"\xd0\x01\n" +
+	"public_key\x18\x02 \x01(\tR\tpublicKey\x12\x12\n" +
+	"\x04type\x18\x03 \x01(\tR\x04type\"\xd0\x01\n" +
 	"\x17ConvertAddressesRequest\x12%\n" +
 	"\x0econsumer_token\x18\x01 \x01(\tR\rconsumerToken\x12\x19\n" +
 	"\bchain_id\x18\x02 \x01(\tR\achainId\x12\x18\n" +
@@ -2701,10 +3290,11 @@ const file_dapplink_walletapi_proto_rawDesc = "" +
 	"\x18ConvertAddressesResponse\x12(\n" +
 	"\x04code\x18\x01 \x01(\x0e2\x14.dapplink.ReturnCodeR\x04code\x12\x10\n" +
 	"\x03msg\x18\x02 \x01(\tR\x03msg\x12-\n" +
-	"\aaddress\x18\x03 \x03(\v2\x13.dapplink.AddressesR\aaddress\"@\n" +
+	"\aaddress\x18\x03 \x03(\v2\x13.dapplink.AddressesR\aaddress\"T\n" +
 	"\x0eAddressesValid\x12\x18\n" +
-	"\aaddress\x18\x01 \x01(\tR\aaddress\x12\x14\n" +
-	"\x05valid\x18\x02 \x01(\bR\x05valid\"\xa6\x01\n" +
+	"\aaddress\x18\x01 \x01(\tR\aaddress\x12\x12\n" +
+	"\x04type\x18\x02 \x01(\tR\x04type\x12\x14\n" +
+	"\x05valid\x18\x03 \x01(\bR\x05valid\"\xa6\x01\n" +
 	"\x15ValidAddressesRequest\x12%\n" +
 	"\x0econsumer_token\x18\x01 \x01(\tR\rconsumerToken\x12\x19\n" +
 	"\bchain_id\x18\x02 \x01(\tR\achainId\x12\x18\n" +
@@ -2733,7 +3323,7 @@ const file_dapplink_walletapi_proto_rawDesc = "" +
 	"\tToAddress\x12\x18\n" +
 	"\aaddress\x18\x01 \x01(\tR\aaddress\x12\x16\n" +
 	"\x06amount\x18\x02 \x01(\tR\x06amount\x12\x1b\n" +
-	"\tmeta_data\x18\x03 \x01(\tR\bmetaData\"\xa9\x02\n" +
+	"\tmeta_data\x18\x03 \x01(\tR\bmetaData\"\xeb\x02\n" +
 	"\x0fTransactionList\x12\x17\n" +
 	"\atx_hash\x18\x01 \x01(\tR\x06txHash\x12\x10\n" +
 	"\x03fee\x18\x02 \x01(\tR\x03fee\x12\x16\n" +
@@ -2744,14 +3334,32 @@ const file_dapplink_walletapi_proto_rawDesc = "" +
 	"\x02to\x18\a \x03(\v2\x13.dapplink.ToAddressR\x02to\x12\x1d\n" +
 	"\n" +
 	"block_hash\x18\b \x01(\tR\tblockHash\x12!\n" +
-	"\fblock_height\x18\t \x01(\x04R\vblockHeight\"\xaf\x01\n" +
+	"\fblock_height\x18\t \x01(\x04R\vblockHeight\x12\x1b\n" +
+	"\tlog_index\x18\n" +
+	" \x01(\rR\blogIndex\x12#\n" +
+	"\rtransfer_kind\x18\v \x01(\tR\ftransferKind\"\xaf\x01\n" +
 	"\fBlockRequest\x12%\n" +
 	"\x0econsumer_token\x18\x01 \x01(\tR\rconsumerToken\x12\x19\n" +
 	"\bchain_id\x18\x02 \x01(\tR\achainId\x12\x18\n" +
 	"\anetwork\x18\x03 \x01(\tR\anetwork\x12\x1f\n" +
 	"\vhash_height\x18\x04 \x01(\tR\n" +
 	"hashHeight\x12\"\n" +
-	"\ris_block_hash\x18\x05 \x01(\bR\visBlockHash\"\xf5\x01\n" +
+	"\ris_block_hash\x18\x05 \x01(\bR\visBlockHash\"|\n" +
+	"\x0fBlockHeaderInfo\x12\x16\n" +
+	"\x06height\x18\x01 \x01(\tR\x06height\x12\x12\n" +
+	"\x04hash\x18\x02 \x01(\tR\x04hash\x12\x1f\n" +
+	"\vparent_hash\x18\x03 \x01(\tR\n" +
+	"parentHash\x12\x1c\n" +
+	"\ttimestamp\x18\x04 \x01(\x04R\ttimestamp\"\xdc\x01\n" +
+	"\x11BatchBlockRequest\x12%\n" +
+	"\x0econsumer_token\x18\x01 \x01(\tR\rconsumerToken\x12\x19\n" +
+	"\bchain_id\x18\x02 \x01(\tR\achainId\x12\x18\n" +
+	"\anetwork\x18\x03 \x01(\tR\anetwork\x12\x1f\n" +
+	"\vnext_height\x18\x04 \x01(\tR\n" +
+	"nextHeight\x12\x1d\n" +
+	"\n" +
+	"end_height\x18\x05 \x01(\tR\tendHeight\x12+\n" +
+	"\x11with_transactions\x18\x06 \x01(\bR\x10withTransactions\"\xf5\x01\n" +
 	"\rBlockResponse\x12(\n" +
 	"\x04code\x18\x01 \x01(\x0e2\x14.dapplink.ReturnCodeR\x04code\x12\x10\n" +
 	"\x03msg\x18\x02 \x01(\tR\x03msg\x12\x16\n" +
@@ -2760,7 +3368,19 @@ const file_dapplink_walletapi_proto_rawDesc = "" +
 	"\vparent_hash\x18\x05 \x01(\tR\n" +
 	"parentHash\x12\x1c\n" +
 	"\ttimestamp\x18\x06 \x01(\x04R\ttimestamp\x12=\n" +
-	"\ftransactions\x18\a \x03(\v2\x19.dapplink.TransactionListR\ftransactions\"\x8a\x01\n" +
+	"\ftransactions\x18\a \x03(\v2\x19.dapplink.TransactionListR\ftransactions\"\xc1\x01\n" +
+	"\x15BlockWithTransactions\x12\x16\n" +
+	"\x06height\x18\x01 \x01(\tR\x06height\x12\x12\n" +
+	"\x04hash\x18\x02 \x01(\tR\x04hash\x12\x1f\n" +
+	"\vparent_hash\x18\x03 \x01(\tR\n" +
+	"parentHash\x12\x1c\n" +
+	"\ttimestamp\x18\x04 \x01(\x04R\ttimestamp\x12=\n" +
+	"\ftransactions\x18\x05 \x03(\v2\x19.dapplink.TransactionListR\ftransactions\"\xbe\x01\n" +
+	"\x12BatchBlockResponse\x12(\n" +
+	"\x04code\x18\x01 \x01(\x0e2\x14.dapplink.ReturnCodeR\x04code\x12\x10\n" +
+	"\x03msg\x18\x02 \x01(\tR\x03msg\x123\n" +
+	"\aheaders\x18\x03 \x03(\v2\x19.dapplink.BlockHeaderInfoR\aheaders\x127\n" +
+	"\x06blocks\x18\x04 \x03(\v2\x1f.dapplink.BlockWithTransactionsR\x06blocks\"\x8a\x01\n" +
 	"\x18TransactionByHashRequest\x12%\n" +
 	"\x0econsumer_token\x18\x01 \x01(\tR\rconsumerToken\x12\x19\n" +
 	"\bchain_id\x18\x02 \x01(\tR\achainId\x12\x18\n" +
@@ -2862,20 +3482,49 @@ const file_dapplink_walletapi_proto_rawDesc = "" +
 	"\x1aAddressApproveListResponse\x12(\n" +
 	"\x04code\x18\x01 \x01(\x0e2\x14.dapplink.ReturnCodeR\x04code\x12\x10\n" +
 	"\x03msg\x18\x02 \x01(\tR\x03msg\x12;\n" +
-	"\tcontracts\x18\x03 \x03(\v2\x1d.dapplink.ApproveContractListR\tcontracts*I\n" +
+	"\tcontracts\x18\x03 \x03(\v2\x1d.dapplink.ApproveContractListR\tcontracts\"\x94\x02\n" +
+	"\x18SponsoredTransferRequest\x12%\n" +
+	"\x0econsumer_token\x18\x01 \x01(\tR\rconsumerToken\x12\x19\n" +
+	"\bchain_id\x18\x02 \x01(\tR\achainId\x12\x18\n" +
+	"\anetwork\x18\x03 \x01(\tR\anetwork\x12!\n" +
+	"\ffrom_address\x18\x04 \x01(\tR\vfromAddress\x12\x1d\n" +
+	"\n" +
+	"to_address\x18\x05 \x01(\tR\ttoAddress\x12\x16\n" +
+	"\x06amount\x18\x06 \x01(\tR\x06amount\x12#\n" +
+	"\rtoken_address\x18\a \x01(\tR\ftokenAddress\x12\x1d\n" +
+	"\n" +
+	"request_id\x18\b \x01(\tR\trequestId\"\xc1\x01\n" +
+	"\x1eSponsoredTransferBuildResponse\x12(\n" +
+	"\x04code\x18\x01 \x01(\x0e2\x14.dapplink.ReturnCodeR\x04code\x12\x10\n" +
+	"\x03msg\x18\x02 \x01(\tR\x03msg\x12 \n" +
+	"\fuser_op_hash\x18\x03 \x01(\tR\n" +
+	"userOpHash\x12\x1f\n" +
+	"\vauth_digest\x18\x04 \x01(\tR\n" +
+	"authDigest\x12 \n" +
+	"\fuser_op_json\x18\x05 \x01(\tR\n" +
+	"userOpJson\"\xef\x01\n" +
+	"\x1cSponsoredTransferSendRequest\x12%\n" +
+	"\x0econsumer_token\x18\x01 \x01(\tR\rconsumerToken\x12\x19\n" +
+	"\bchain_id\x18\x02 \x01(\tR\achainId\x12\x18\n" +
+	"\anetwork\x18\x03 \x01(\tR\anetwork\x12 \n" +
+	"\fuser_op_json\x18\x04 \x01(\tR\n" +
+	"userOpJson\x12%\n" +
+	"\x0eauth_signature\x18\x05 \x01(\tR\rauthSignature\x12*\n" +
+	"\x11user_op_signature\x18\x06 \x01(\tR\x0fuserOpSignature*I\n" +
 	"\bTxStatus\x12\f\n" +
 	"\bNotFound\x10\x00\x12\v\n" +
 	"\aPending\x10\x01\x12\n" +
 	"\n" +
 	"\x06Failed\x10\x02\x12\v\n" +
 	"\aSuccess\x10\x03\x12\t\n" +
-	"\x05Other\x10\x042\xce\t\n" +
+	"\x05Other\x10\x042\xec\v\n" +
 	"\x17WalletApiGateWayService\x12S\n" +
 	"\x10getSupportChains\x12\x1d.dapplink.SupportChainRequest\x1a\x1e.dapplink.SupportChainResponse\"\x00\x12[\n" +
 	"\x10convertAddresses\x12!.dapplink.ConvertAddressesRequest\x1a\".dapplink.ConvertAddressesResponse\"\x00\x12U\n" +
 	"\x0evalidAddresses\x12\x1f.dapplink.ValidAddressesRequest\x1a .dapplink.ValidAddressesResponse\"\x00\x12R\n" +
 	"\x0fgetLastestBlock\x12\x1d.dapplink.LastestBlockRequest\x1a\x1e.dapplink.LastestBlockResponse\"\x00\x12=\n" +
-	"\bgetBlock\x12\x16.dapplink.BlockRequest\x1a\x17.dapplink.BlockResponse\"\x00\x12a\n" +
+	"\bgetBlock\x12\x16.dapplink.BlockRequest\x1a\x17.dapplink.BlockResponse\"\x00\x12L\n" +
+	"\rgetBatchBlock\x12\x1b.dapplink.BatchBlockRequest\x1a\x1c.dapplink.BatchBlockResponse\"\x00\x12a\n" +
 	"\x14getTransactionByHash\x12\".dapplink.TransactionByHashRequest\x1a#.dapplink.TransactionByHashResponse\"\x00\x12j\n" +
 	"\x17getTransactionByAddress\x12%.dapplink.TransactionByAddressRequest\x1a&.dapplink.TransactionByAddressResponse\"\x00\x12X\n" +
 	"\x11getAccountBalance\x12\x1f.dapplink.AccountBalanceRequest\x1a .dapplink.AccountBalanceResponse\"\x00\x12Y\n" +
@@ -2883,7 +3532,9 @@ const file_dapplink_walletapi_proto_rawDesc = "" +
 	"\x16buildTransactionSchema\x12\".dapplink.TransactionSchemaRequest\x1a#.dapplink.TransactionSchemaResponse\"\x00\x12c\n" +
 	"\x16buildUnSignTransaction\x12\".dapplink.UnSignTransactionRequest\x1a#.dapplink.UnSignTransactionResponse\"\x00\x12c\n" +
 	"\x16buildSignedTransaction\x12\".dapplink.SignedTransactionRequest\x1a#.dapplink.SignedTransactionResponse\"\x00\x12d\n" +
-	"\x15getAddressApproveList\x12#.dapplink.AddressApproveListRequest\x1a$.dapplink.AddressApproveListResponse\"\x00B\x17Z\x15../protobuf/walletapib\x06proto3"
+	"\x15getAddressApproveList\x12#.dapplink.AddressApproveListRequest\x1a$.dapplink.AddressApproveListResponse\"\x00\x12h\n" +
+	"\x16buildSponsoredTransfer\x12\".dapplink.SponsoredTransferRequest\x1a(.dapplink.SponsoredTransferBuildResponse\"\x00\x12d\n" +
+	"\x15sendSponsoredTransfer\x12&.dapplink.SponsoredTransferSendRequest\x1a!.dapplink.SendTransactionResponse\"\x00B\x17Z\x15../protobuf/walletapib\x06proto3"
 
 var (
 	file_dapplink_walletapi_proto_rawDescOnce sync.Once
@@ -2898,7 +3549,7 @@ func file_dapplink_walletapi_proto_rawDescGZIP() []byte {
 }
 
 var file_dapplink_walletapi_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
-var file_dapplink_walletapi_proto_msgTypes = make([]protoimpl.MessageInfo, 41)
+var file_dapplink_walletapi_proto_msgTypes = make([]protoimpl.MessageInfo, 48)
 var file_dapplink_walletapi_proto_goTypes = []any{
 	(TxStatus)(0),                          // 0: dapplink.TxStatus
 	(*CommonResponse)(nil),                 // 1: dapplink.CommonResponse
@@ -2918,97 +3569,115 @@ var file_dapplink_walletapi_proto_goTypes = []any{
 	(*ToAddress)(nil),                      // 15: dapplink.ToAddress
 	(*TransactionList)(nil),                // 16: dapplink.TransactionList
 	(*BlockRequest)(nil),                   // 17: dapplink.BlockRequest
-	(*BlockResponse)(nil),                  // 18: dapplink.BlockResponse
-	(*TransactionByHashRequest)(nil),       // 19: dapplink.TransactionByHashRequest
-	(*TransactionByHashResponse)(nil),      // 20: dapplink.TransactionByHashResponse
-	(*TransactionByAddressRequest)(nil),    // 21: dapplink.TransactionByAddressRequest
-	(*TransactionByAddressResponse)(nil),   // 22: dapplink.TransactionByAddressResponse
-	(*AccountBalanceRequest)(nil),          // 23: dapplink.AccountBalanceRequest
-	(*AccountBalanceResponse)(nil),         // 24: dapplink.AccountBalanceResponse
-	(*RawTransaction)(nil),                 // 25: dapplink.RawTransaction
-	(*SendTransactionsRequest)(nil),        // 26: dapplink.SendTransactionsRequest
-	(*RawTransactionReturn)(nil),           // 27: dapplink.RawTransactionReturn
-	(*SendTransactionResponse)(nil),        // 28: dapplink.SendTransactionResponse
-	(*TransactionSchemaRequest)(nil),       // 29: dapplink.TransactionSchemaRequest
-	(*TransactionSchemaResponse)(nil),      // 30: dapplink.TransactionSchemaResponse
-	(*Base64Transaction)(nil),              // 31: dapplink.Base64Transaction
-	(*UnsignedTransactionMessageHash)(nil), // 32: dapplink.UnsignedTransactionMessageHash
-	(*UnSignTransactionRequest)(nil),       // 33: dapplink.UnSignTransactionRequest
-	(*UnSignTransactionResponse)(nil),      // 34: dapplink.UnSignTransactionResponse
-	(*Base64TransactionWithSignature)(nil), // 35: dapplink.Base64TransactionWithSignature
-	(*SignedTxWithHash)(nil),               // 36: dapplink.SignedTxWithHash
-	(*SignedTransactionRequest)(nil),       // 37: dapplink.SignedTransactionRequest
-	(*SignedTransactionResponse)(nil),      // 38: dapplink.SignedTransactionResponse
-	(*ApproveContractList)(nil),            // 39: dapplink.ApproveContractList
-	(*AddressApproveListRequest)(nil),      // 40: dapplink.AddressApproveListRequest
-	(*AddressApproveListResponse)(nil),     // 41: dapplink.AddressApproveListResponse
-	(common.ReturnCode)(0),                 // 42: dapplink.ReturnCode
-	(*common.PublicKey)(nil),               // 43: dapplink.PublicKey
+	(*BlockHeaderInfo)(nil),                // 18: dapplink.BlockHeaderInfo
+	(*BatchBlockRequest)(nil),              // 19: dapplink.BatchBlockRequest
+	(*BlockResponse)(nil),                  // 20: dapplink.BlockResponse
+	(*BlockWithTransactions)(nil),          // 21: dapplink.BlockWithTransactions
+	(*BatchBlockResponse)(nil),             // 22: dapplink.BatchBlockResponse
+	(*TransactionByHashRequest)(nil),       // 23: dapplink.TransactionByHashRequest
+	(*TransactionByHashResponse)(nil),      // 24: dapplink.TransactionByHashResponse
+	(*TransactionByAddressRequest)(nil),    // 25: dapplink.TransactionByAddressRequest
+	(*TransactionByAddressResponse)(nil),   // 26: dapplink.TransactionByAddressResponse
+	(*AccountBalanceRequest)(nil),          // 27: dapplink.AccountBalanceRequest
+	(*AccountBalanceResponse)(nil),         // 28: dapplink.AccountBalanceResponse
+	(*RawTransaction)(nil),                 // 29: dapplink.RawTransaction
+	(*SendTransactionsRequest)(nil),        // 30: dapplink.SendTransactionsRequest
+	(*RawTransactionReturn)(nil),           // 31: dapplink.RawTransactionReturn
+	(*SendTransactionResponse)(nil),        // 32: dapplink.SendTransactionResponse
+	(*TransactionSchemaRequest)(nil),       // 33: dapplink.TransactionSchemaRequest
+	(*TransactionSchemaResponse)(nil),      // 34: dapplink.TransactionSchemaResponse
+	(*Base64Transaction)(nil),              // 35: dapplink.Base64Transaction
+	(*UnsignedTransactionMessageHash)(nil), // 36: dapplink.UnsignedTransactionMessageHash
+	(*UnSignTransactionRequest)(nil),       // 37: dapplink.UnSignTransactionRequest
+	(*UnSignTransactionResponse)(nil),      // 38: dapplink.UnSignTransactionResponse
+	(*Base64TransactionWithSignature)(nil), // 39: dapplink.Base64TransactionWithSignature
+	(*SignedTxWithHash)(nil),               // 40: dapplink.SignedTxWithHash
+	(*SignedTransactionRequest)(nil),       // 41: dapplink.SignedTransactionRequest
+	(*SignedTransactionResponse)(nil),      // 42: dapplink.SignedTransactionResponse
+	(*ApproveContractList)(nil),            // 43: dapplink.ApproveContractList
+	(*AddressApproveListRequest)(nil),      // 44: dapplink.AddressApproveListRequest
+	(*AddressApproveListResponse)(nil),     // 45: dapplink.AddressApproveListResponse
+	(*SponsoredTransferRequest)(nil),       // 46: dapplink.SponsoredTransferRequest
+	(*SponsoredTransferBuildResponse)(nil), // 47: dapplink.SponsoredTransferBuildResponse
+	(*SponsoredTransferSendRequest)(nil),   // 48: dapplink.SponsoredTransferSendRequest
+	(common.ReturnCode)(0),                 // 49: dapplink.ReturnCode
+	(*common.PublicKey)(nil),               // 50: dapplink.PublicKey
 }
 var file_dapplink_walletapi_proto_depIdxs = []int32{
-	42, // 0: dapplink.CommonResponse.code:type_name -> dapplink.ReturnCode
+	49, // 0: dapplink.CommonResponse.code:type_name -> dapplink.ReturnCode
 	2,  // 1: dapplink.SupportChain.end_point:type_name -> dapplink.EndPoint
-	42, // 2: dapplink.SupportChainResponse.code:type_name -> dapplink.ReturnCode
+	49, // 2: dapplink.SupportChainResponse.code:type_name -> dapplink.ReturnCode
 	3,  // 3: dapplink.SupportChainResponse.chains:type_name -> dapplink.SupportChain
-	43, // 4: dapplink.ConvertAddressesRequest.public_key:type_name -> dapplink.PublicKey
-	42, // 5: dapplink.ConvertAddressesResponse.code:type_name -> dapplink.ReturnCode
+	50, // 4: dapplink.ConvertAddressesRequest.public_key:type_name -> dapplink.PublicKey
+	49, // 5: dapplink.ConvertAddressesResponse.code:type_name -> dapplink.ReturnCode
 	6,  // 6: dapplink.ConvertAddressesResponse.address:type_name -> dapplink.Addresses
 	6,  // 7: dapplink.ValidAddressesRequest.addresses:type_name -> dapplink.Addresses
-	42, // 8: dapplink.ValidAddressesResponse.code:type_name -> dapplink.ReturnCode
+	49, // 8: dapplink.ValidAddressesResponse.code:type_name -> dapplink.ReturnCode
 	9,  // 9: dapplink.ValidAddressesResponse.address_valid:type_name -> dapplink.AddressesValid
-	42, // 10: dapplink.LastestBlockResponse.code:type_name -> dapplink.ReturnCode
+	49, // 10: dapplink.LastestBlockResponse.code:type_name -> dapplink.ReturnCode
 	14, // 11: dapplink.TransactionList.from:type_name -> dapplink.FromAddress
 	15, // 12: dapplink.TransactionList.to:type_name -> dapplink.ToAddress
-	42, // 13: dapplink.BlockResponse.code:type_name -> dapplink.ReturnCode
+	49, // 13: dapplink.BlockResponse.code:type_name -> dapplink.ReturnCode
 	16, // 14: dapplink.BlockResponse.transactions:type_name -> dapplink.TransactionList
-	42, // 15: dapplink.TransactionByHashResponse.code:type_name -> dapplink.ReturnCode
-	16, // 16: dapplink.TransactionByHashResponse.transaction:type_name -> dapplink.TransactionList
-	42, // 17: dapplink.TransactionByAddressResponse.code:type_name -> dapplink.ReturnCode
-	16, // 18: dapplink.TransactionByAddressResponse.transaction:type_name -> dapplink.TransactionList
-	42, // 19: dapplink.AccountBalanceResponse.code:type_name -> dapplink.ReturnCode
-	25, // 20: dapplink.SendTransactionsRequest.raw_tx:type_name -> dapplink.RawTransaction
-	42, // 21: dapplink.SendTransactionResponse.code:type_name -> dapplink.ReturnCode
-	27, // 22: dapplink.SendTransactionResponse.txn_ret:type_name -> dapplink.RawTransactionReturn
-	42, // 23: dapplink.TransactionSchemaResponse.code:type_name -> dapplink.ReturnCode
-	31, // 24: dapplink.UnSignTransactionRequest.base64_txn:type_name -> dapplink.Base64Transaction
-	42, // 25: dapplink.UnSignTransactionResponse.code:type_name -> dapplink.ReturnCode
-	32, // 26: dapplink.UnSignTransactionResponse.unsigned_txn:type_name -> dapplink.UnsignedTransactionMessageHash
-	35, // 27: dapplink.SignedTransactionRequest.txn_with_signature:type_name -> dapplink.Base64TransactionWithSignature
-	42, // 28: dapplink.SignedTransactionResponse.code:type_name -> dapplink.ReturnCode
-	36, // 29: dapplink.SignedTransactionResponse.signed_txn:type_name -> dapplink.SignedTxWithHash
-	42, // 30: dapplink.AddressApproveListResponse.code:type_name -> dapplink.ReturnCode
-	39, // 31: dapplink.AddressApproveListResponse.contracts:type_name -> dapplink.ApproveContractList
-	4,  // 32: dapplink.WalletApiGateWayService.getSupportChains:input_type -> dapplink.SupportChainRequest
-	7,  // 33: dapplink.WalletApiGateWayService.convertAddresses:input_type -> dapplink.ConvertAddressesRequest
-	10, // 34: dapplink.WalletApiGateWayService.validAddresses:input_type -> dapplink.ValidAddressesRequest
-	12, // 35: dapplink.WalletApiGateWayService.getLastestBlock:input_type -> dapplink.LastestBlockRequest
-	17, // 36: dapplink.WalletApiGateWayService.getBlock:input_type -> dapplink.BlockRequest
-	19, // 37: dapplink.WalletApiGateWayService.getTransactionByHash:input_type -> dapplink.TransactionByHashRequest
-	21, // 38: dapplink.WalletApiGateWayService.getTransactionByAddress:input_type -> dapplink.TransactionByAddressRequest
-	23, // 39: dapplink.WalletApiGateWayService.getAccountBalance:input_type -> dapplink.AccountBalanceRequest
-	26, // 40: dapplink.WalletApiGateWayService.sendTransaction:input_type -> dapplink.SendTransactionsRequest
-	29, // 41: dapplink.WalletApiGateWayService.buildTransactionSchema:input_type -> dapplink.TransactionSchemaRequest
-	33, // 42: dapplink.WalletApiGateWayService.buildUnSignTransaction:input_type -> dapplink.UnSignTransactionRequest
-	37, // 43: dapplink.WalletApiGateWayService.buildSignedTransaction:input_type -> dapplink.SignedTransactionRequest
-	40, // 44: dapplink.WalletApiGateWayService.getAddressApproveList:input_type -> dapplink.AddressApproveListRequest
-	5,  // 45: dapplink.WalletApiGateWayService.getSupportChains:output_type -> dapplink.SupportChainResponse
-	8,  // 46: dapplink.WalletApiGateWayService.convertAddresses:output_type -> dapplink.ConvertAddressesResponse
-	11, // 47: dapplink.WalletApiGateWayService.validAddresses:output_type -> dapplink.ValidAddressesResponse
-	13, // 48: dapplink.WalletApiGateWayService.getLastestBlock:output_type -> dapplink.LastestBlockResponse
-	18, // 49: dapplink.WalletApiGateWayService.getBlock:output_type -> dapplink.BlockResponse
-	20, // 50: dapplink.WalletApiGateWayService.getTransactionByHash:output_type -> dapplink.TransactionByHashResponse
-	22, // 51: dapplink.WalletApiGateWayService.getTransactionByAddress:output_type -> dapplink.TransactionByAddressResponse
-	24, // 52: dapplink.WalletApiGateWayService.getAccountBalance:output_type -> dapplink.AccountBalanceResponse
-	28, // 53: dapplink.WalletApiGateWayService.sendTransaction:output_type -> dapplink.SendTransactionResponse
-	30, // 54: dapplink.WalletApiGateWayService.buildTransactionSchema:output_type -> dapplink.TransactionSchemaResponse
-	34, // 55: dapplink.WalletApiGateWayService.buildUnSignTransaction:output_type -> dapplink.UnSignTransactionResponse
-	38, // 56: dapplink.WalletApiGateWayService.buildSignedTransaction:output_type -> dapplink.SignedTransactionResponse
-	41, // 57: dapplink.WalletApiGateWayService.getAddressApproveList:output_type -> dapplink.AddressApproveListResponse
-	45, // [45:58] is the sub-list for method output_type
-	32, // [32:45] is the sub-list for method input_type
-	32, // [32:32] is the sub-list for extension type_name
-	32, // [32:32] is the sub-list for extension extendee
-	0,  // [0:32] is the sub-list for field type_name
+	16, // 15: dapplink.BlockWithTransactions.transactions:type_name -> dapplink.TransactionList
+	49, // 16: dapplink.BatchBlockResponse.code:type_name -> dapplink.ReturnCode
+	18, // 17: dapplink.BatchBlockResponse.headers:type_name -> dapplink.BlockHeaderInfo
+	21, // 18: dapplink.BatchBlockResponse.blocks:type_name -> dapplink.BlockWithTransactions
+	49, // 19: dapplink.TransactionByHashResponse.code:type_name -> dapplink.ReturnCode
+	16, // 20: dapplink.TransactionByHashResponse.transaction:type_name -> dapplink.TransactionList
+	49, // 21: dapplink.TransactionByAddressResponse.code:type_name -> dapplink.ReturnCode
+	16, // 22: dapplink.TransactionByAddressResponse.transaction:type_name -> dapplink.TransactionList
+	49, // 23: dapplink.AccountBalanceResponse.code:type_name -> dapplink.ReturnCode
+	29, // 24: dapplink.SendTransactionsRequest.raw_tx:type_name -> dapplink.RawTransaction
+	49, // 25: dapplink.SendTransactionResponse.code:type_name -> dapplink.ReturnCode
+	31, // 26: dapplink.SendTransactionResponse.txn_ret:type_name -> dapplink.RawTransactionReturn
+	49, // 27: dapplink.TransactionSchemaResponse.code:type_name -> dapplink.ReturnCode
+	35, // 28: dapplink.UnSignTransactionRequest.base64_txn:type_name -> dapplink.Base64Transaction
+	49, // 29: dapplink.UnSignTransactionResponse.code:type_name -> dapplink.ReturnCode
+	36, // 30: dapplink.UnSignTransactionResponse.unsigned_txn:type_name -> dapplink.UnsignedTransactionMessageHash
+	39, // 31: dapplink.SignedTransactionRequest.txn_with_signature:type_name -> dapplink.Base64TransactionWithSignature
+	49, // 32: dapplink.SignedTransactionResponse.code:type_name -> dapplink.ReturnCode
+	40, // 33: dapplink.SignedTransactionResponse.signed_txn:type_name -> dapplink.SignedTxWithHash
+	49, // 34: dapplink.AddressApproveListResponse.code:type_name -> dapplink.ReturnCode
+	43, // 35: dapplink.AddressApproveListResponse.contracts:type_name -> dapplink.ApproveContractList
+	49, // 36: dapplink.SponsoredTransferBuildResponse.code:type_name -> dapplink.ReturnCode
+	4,  // 37: dapplink.WalletApiGateWayService.getSupportChains:input_type -> dapplink.SupportChainRequest
+	7,  // 38: dapplink.WalletApiGateWayService.convertAddresses:input_type -> dapplink.ConvertAddressesRequest
+	10, // 39: dapplink.WalletApiGateWayService.validAddresses:input_type -> dapplink.ValidAddressesRequest
+	12, // 40: dapplink.WalletApiGateWayService.getLastestBlock:input_type -> dapplink.LastestBlockRequest
+	17, // 41: dapplink.WalletApiGateWayService.getBlock:input_type -> dapplink.BlockRequest
+	19, // 42: dapplink.WalletApiGateWayService.getBatchBlock:input_type -> dapplink.BatchBlockRequest
+	23, // 43: dapplink.WalletApiGateWayService.getTransactionByHash:input_type -> dapplink.TransactionByHashRequest
+	25, // 44: dapplink.WalletApiGateWayService.getTransactionByAddress:input_type -> dapplink.TransactionByAddressRequest
+	27, // 45: dapplink.WalletApiGateWayService.getAccountBalance:input_type -> dapplink.AccountBalanceRequest
+	30, // 46: dapplink.WalletApiGateWayService.sendTransaction:input_type -> dapplink.SendTransactionsRequest
+	33, // 47: dapplink.WalletApiGateWayService.buildTransactionSchema:input_type -> dapplink.TransactionSchemaRequest
+	37, // 48: dapplink.WalletApiGateWayService.buildUnSignTransaction:input_type -> dapplink.UnSignTransactionRequest
+	41, // 49: dapplink.WalletApiGateWayService.buildSignedTransaction:input_type -> dapplink.SignedTransactionRequest
+	44, // 50: dapplink.WalletApiGateWayService.getAddressApproveList:input_type -> dapplink.AddressApproveListRequest
+	46, // 51: dapplink.WalletApiGateWayService.buildSponsoredTransfer:input_type -> dapplink.SponsoredTransferRequest
+	48, // 52: dapplink.WalletApiGateWayService.sendSponsoredTransfer:input_type -> dapplink.SponsoredTransferSendRequest
+	5,  // 53: dapplink.WalletApiGateWayService.getSupportChains:output_type -> dapplink.SupportChainResponse
+	8,  // 54: dapplink.WalletApiGateWayService.convertAddresses:output_type -> dapplink.ConvertAddressesResponse
+	11, // 55: dapplink.WalletApiGateWayService.validAddresses:output_type -> dapplink.ValidAddressesResponse
+	13, // 56: dapplink.WalletApiGateWayService.getLastestBlock:output_type -> dapplink.LastestBlockResponse
+	20, // 57: dapplink.WalletApiGateWayService.getBlock:output_type -> dapplink.BlockResponse
+	22, // 58: dapplink.WalletApiGateWayService.getBatchBlock:output_type -> dapplink.BatchBlockResponse
+	24, // 59: dapplink.WalletApiGateWayService.getTransactionByHash:output_type -> dapplink.TransactionByHashResponse
+	26, // 60: dapplink.WalletApiGateWayService.getTransactionByAddress:output_type -> dapplink.TransactionByAddressResponse
+	28, // 61: dapplink.WalletApiGateWayService.getAccountBalance:output_type -> dapplink.AccountBalanceResponse
+	32, // 62: dapplink.WalletApiGateWayService.sendTransaction:output_type -> dapplink.SendTransactionResponse
+	34, // 63: dapplink.WalletApiGateWayService.buildTransactionSchema:output_type -> dapplink.TransactionSchemaResponse
+	38, // 64: dapplink.WalletApiGateWayService.buildUnSignTransaction:output_type -> dapplink.UnSignTransactionResponse
+	42, // 65: dapplink.WalletApiGateWayService.buildSignedTransaction:output_type -> dapplink.SignedTransactionResponse
+	45, // 66: dapplink.WalletApiGateWayService.getAddressApproveList:output_type -> dapplink.AddressApproveListResponse
+	47, // 67: dapplink.WalletApiGateWayService.buildSponsoredTransfer:output_type -> dapplink.SponsoredTransferBuildResponse
+	32, // 68: dapplink.WalletApiGateWayService.sendSponsoredTransfer:output_type -> dapplink.SendTransactionResponse
+	53, // [53:69] is the sub-list for method output_type
+	37, // [37:53] is the sub-list for method input_type
+	37, // [37:37] is the sub-list for extension type_name
+	37, // [37:37] is the sub-list for extension extendee
+	0,  // [0:37] is the sub-list for field type_name
 }
 
 func init() { file_dapplink_walletapi_proto_init() }
@@ -3022,7 +3691,7 @@ func file_dapplink_walletapi_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_dapplink_walletapi_proto_rawDesc), len(file_dapplink_walletapi_proto_rawDesc)),
 			NumEnums:      1,
-			NumMessages:   41,
+			NumMessages:   48,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

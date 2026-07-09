@@ -3,18 +3,17 @@ package main
 import (
 	"context"
 
-	"github.com/the-web3/mock-risk-server/client/walletapiclient"
-	"github.com/the-web3/mock-risk-server/common/opio"
-	"github.com/the-web3/mock-risk-server/database"
-	"github.com/the-web3/mock-risk-server/protobuf/walletapi"
 	"github.com/urfave/cli/v2"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 
 	"github.com/ethereum/go-ethereum/log"
+
+	"github.com/the-web3/mock-risk-server/client/walletapiclient"
 	"github.com/the-web3/mock-risk-server/common/cliapp"
 	"github.com/the-web3/mock-risk-server/config"
 	flags2 "github.com/the-web3/mock-risk-server/flags"
+	"github.com/the-web3/mock-risk-server/protobuf/walletapi"
 	"github.com/the-web3/mock-risk-server/services"
 )
 
@@ -45,28 +44,6 @@ func runRpc(ctx *cli.Context, shutdown context.CancelCauseFunc) (cliapp.Lifecycl
 	return services.NewRiskServerWireServices(ristServerConfig, apiGateWayClient)
 }
 
-func runMigrations(ctx *cli.Context) error {
-	ctx.Context = opio.CancelOnInterrupt(ctx.Context)
-	log.Info("running migrations...")
-	cfg, err := config.LoadConfig(ctx)
-	if err != nil {
-		log.Error("failed to load config", "err", err)
-		return err
-	}
-	db, err := database.NewDB(ctx.Context, cfg.DbConf)
-	if err != nil {
-		log.Error("failed to connect to database", "err", err)
-		return err
-	}
-	defer func(db *database.DB) {
-		err := db.Close()
-		if err != nil {
-			log.Error("fail to close database", "err", err)
-		}
-	}(db)
-	return db.ExecuteSQLMigration(cfg.Migrations)
-}
-
 func NewCli() *cli.App {
 	flags := flags2.Flags
 	return &cli.App{
@@ -79,12 +56,6 @@ func NewCli() *cli.App {
 				Flags:       flags,
 				Description: "Run rpc services",
 				Action:      cliapp.LifecycleCmd(runRpc),
-			},
-			{
-				Name:        "migrate",
-				Flags:       flags,
-				Description: "Run database migrations",
-				Action:      runMigrations,
 			},
 			{
 				Name:        "version",

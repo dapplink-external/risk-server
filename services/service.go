@@ -6,12 +6,12 @@ import (
 	"net"
 	"sync/atomic"
 
-	"github.com/ethereum/go-ethereum/log"
-	"github.com/the-web3/mock-risk-server/client/walletapiclient"
-	"github.com/the-web3/mock-risk-server/database"
-	"github.com/the-web3/mock-risk-server/protobuf/riskcontroller"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
+
+	"github.com/ethereum/go-ethereum/log"
+	"github.com/the-web3/mock-risk-server/client/walletapiclient"
+	"github.com/the-web3/mock-risk-server/protobuf/riskcontroller"
 )
 
 const MaxRecvMessageSize = 1024 * 1024 * 300
@@ -23,14 +23,12 @@ type RiskServerConfig struct {
 
 type RiskServerWireServices struct {
 	*RiskServerConfig
-	db           *database.DB
 	rpcApiClient *walletapiclient.WalletApiGateWayServiceClient
 	stopped      atomic.Bool
 }
 
-func NewRiskServerWireServices(config *RiskServerConfig, db *database.DB, rpcApiClient *walletapiclient.WalletApiGateWayServiceClient) (*RiskServerWireServices, error) {
+func NewRiskServerWireServices(config *RiskServerConfig, rpcApiClient *walletapiclient.WalletApiGateWayServiceClient) (*RiskServerWireServices, error) {
 	return &RiskServerWireServices{
-		db:               db,
 		RiskServerConfig: config,
 		rpcApiClient:     rpcApiClient,
 	}, nil
