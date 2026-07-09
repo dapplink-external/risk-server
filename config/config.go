@@ -11,15 +11,9 @@ type Config struct {
 	RpcServer     ServerConfig
 	MetricsServer ServerConfig
 	ApiGateWayRpc string
-	DbConf        DBConfig
-}
-
-type DBConfig struct {
-	Host     string
-	Port     int
-	Name     string
-	User     string
-	Password string
+	LevelDbPath   string
+	RiskKey       string
+	AccessToken   string
 }
 
 type ServerConfig struct {
@@ -44,5 +38,9 @@ func NewConfig(ctx *cli.Context) Config {
 			Host: ctx.String(flags.MetricsHostFlag.Name),
 			Port: ctx.Int(flags.MetricsPortFlag.Name),
 		},
+		ApiGateWayRpc: ctx.String(flags.ApiGateWayRpcFlag.Name),
+		LevelDbPath:   ctx.String(flags.LevelDbPathFlag.Name),
+		RiskKey:       ctx.String(flags.RiskKeyFlag.Name),
+		AccessToken:   ctx.String(flags.AccessTokenFlag.Name),
 	}
 }

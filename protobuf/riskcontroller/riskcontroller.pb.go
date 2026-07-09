@@ -7,7 +7,7 @@
 package riskcontroller
 
 import (
-	common "../protobuf/common"
+	common "github.com/the-web3/mock-risk-server/protobuf/common"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	reflect "reflect"
@@ -238,6 +238,7 @@ type CheckOfflineTxResult struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	BusinessTxId  string                 `protobuf:"bytes,1,opt,name=business_tx_id,json=businessTxId,proto3" json:"business_tx_id,omitempty"`
 	IsPassed      bool                   `protobuf:"varint,2,opt,name=is_passed,json=isPassed,proto3" json:"is_passed,omitempty"`
+	RiskKeyHash   string                 `protobuf:"bytes,3,opt,name=risk_key_hash,json=riskKeyHash,proto3" json:"risk_key_hash,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -284,6 +285,13 @@ func (x *CheckOfflineTxResult) GetIsPassed() bool {
 		return x.IsPassed
 	}
 	return false
+}
+
+func (x *CheckOfflineTxResult) GetRiskKeyHash() string {
+	if x != nil {
+		return x.RiskKeyHash
+	}
+	return ""
 }
 
 type CheckOfflineTransactionRequest struct {
@@ -1108,10 +1116,11 @@ const file_dapplink_riskcontroller_proto_rawDesc = "" +
 	"\fwithdraw_txn\x18\x02 \x03(\v2\x18.dapplink.WithdrawTxListR\vwithdrawTxn\"]\n" +
 	"\x1friskWithdrawTransactionResponse\x12(\n" +
 	"\x04code\x18\x01 \x01(\x0e2\x14.dapplink.ReturnCodeR\x04code\x12\x10\n" +
-	"\x03msg\x18\x02 \x01(\tR\x03msg\"Y\n" +
+	"\x03msg\x18\x02 \x01(\tR\x03msg\"}\n" +
 	"\x14checkOfflineTxResult\x12$\n" +
 	"\x0ebusiness_tx_id\x18\x01 \x01(\tR\fbusinessTxId\x12\x1b\n" +
-	"\tis_passed\x18\x02 \x01(\bR\bisPassed\"\x8d\x01\n" +
+	"\tis_passed\x18\x02 \x01(\bR\bisPassed\x12\"\n" +
+	"\rrisk_key_hash\x18\x03 \x01(\tR\vriskKeyHash\"\x8d\x01\n" +
 	"\x1echeckOfflineTransactionRequest\x12%\n" +
 	"\x0econsumer_token\x18\x01 \x01(\tR\rconsumerToken\x12D\n" +
 	"\x11check_offline_txn\x18\x02 \x03(\v2\x18.dapplink.WithdrawTxListR\x0fcheckOfflineTxn\"\x9a\x01\n" +
@@ -1167,11 +1176,11 @@ const file_dapplink_riskcontroller_proto_rawDesc = "" +
 	"\x04code\x18\x01 \x01(\x0e2\x14.dapplink.ReturnCodeR\x04code\x12\x10\n" +
 	"\x03msg\x18\x02 \x01(\tR\x03msg\x12\x1b\n" +
 	"\tis_passed\x18\x03 \x01(\bR\bisPassed2\x88\x05\n" +
-	"\x16RiskControllerServices\x12g\n" +
-	"\x0esubmitWithdraw\x12(.dapplink.riskWithdrawTransactionRequest\x1a).dapplink.riskWithdrawTransactionResponse\"\x00\x12m\n" +
-	"\x14checkOfflineWithdraw\x12(.dapplink.checkOfflineTransactionRequest\x1a).dapplink.checkOfflineTransactionResponse\"\x00\x12X\n" +
+	"\x16RiskControllerServices\x12X\n" +
 	"\x0fcheckAmlAddress\x12 .dapplink.CheckAmlAddressRequest\x1a!.dapplink.CheckAmlAddressResponse\"\x00\x12m\n" +
-	"\x16checkChainTransactions\x12'.dapplink.CheckChainTransactionsRequest\x1a(.dapplink.CheckChainTransactionsResponse\"\x00\x12^\n" +
+	"\x16checkChainTransactions\x12'.dapplink.CheckChainTransactionsRequest\x1a(.dapplink.CheckChainTransactionsResponse\"\x00\x12g\n" +
+	"\x0esubmitWithdraw\x12(.dapplink.riskWithdrawTransactionRequest\x1a).dapplink.riskWithdrawTransactionResponse\"\x00\x12m\n" +
+	"\x14checkOfflineWithdraw\x12(.dapplink.checkOfflineTransactionRequest\x1a).dapplink.checkOfflineTransactionResponse\"\x00\x12^\n" +
 	"\x15submitTransactionFlow\x12 .dapplink.transactionFlowRequest\x1a!.dapplink.transactionFlowResponse\"\x00\x12m\n" +
 	"\x16checkedTransactionFlow\x12'.dapplink.transactionFlowCheckedRequest\x1a(.dapplink.transactionFlowCheckedResponse\"\x00B\x1cZ\x1a../protobuf/riskcontrollerb\x06proto3"
 
@@ -1223,16 +1232,16 @@ var file_dapplink_riskcontroller_proto_depIdxs = []int32{
 	11, // 10: dapplink.CheckChainTransactionsResponse.ret_chain_txn:type_name -> dapplink.RetChainTransaction
 	18, // 11: dapplink.transactionFlowResponse.code:type_name -> dapplink.ReturnCode
 	18, // 12: dapplink.transactionFlowCheckedResponse.code:type_name -> dapplink.ReturnCode
-	1,  // 13: dapplink.RiskControllerServices.submitWithdraw:input_type -> dapplink.riskWithdrawTransactionRequest
-	4,  // 14: dapplink.RiskControllerServices.checkOfflineWithdraw:input_type -> dapplink.checkOfflineTransactionRequest
-	8,  // 15: dapplink.RiskControllerServices.checkAmlAddress:input_type -> dapplink.CheckAmlAddressRequest
-	12, // 16: dapplink.RiskControllerServices.checkChainTransactions:input_type -> dapplink.CheckChainTransactionsRequest
+	8,  // 13: dapplink.RiskControllerServices.checkAmlAddress:input_type -> dapplink.CheckAmlAddressRequest
+	12, // 14: dapplink.RiskControllerServices.checkChainTransactions:input_type -> dapplink.CheckChainTransactionsRequest
+	1,  // 15: dapplink.RiskControllerServices.submitWithdraw:input_type -> dapplink.riskWithdrawTransactionRequest
+	4,  // 16: dapplink.RiskControllerServices.checkOfflineWithdraw:input_type -> dapplink.checkOfflineTransactionRequest
 	14, // 17: dapplink.RiskControllerServices.submitTransactionFlow:input_type -> dapplink.transactionFlowRequest
 	16, // 18: dapplink.RiskControllerServices.checkedTransactionFlow:input_type -> dapplink.transactionFlowCheckedRequest
-	2,  // 19: dapplink.RiskControllerServices.submitWithdraw:output_type -> dapplink.riskWithdrawTransactionResponse
-	5,  // 20: dapplink.RiskControllerServices.checkOfflineWithdraw:output_type -> dapplink.checkOfflineTransactionResponse
-	9,  // 21: dapplink.RiskControllerServices.checkAmlAddress:output_type -> dapplink.CheckAmlAddressResponse
-	13, // 22: dapplink.RiskControllerServices.checkChainTransactions:output_type -> dapplink.CheckChainTransactionsResponse
+	9,  // 19: dapplink.RiskControllerServices.checkAmlAddress:output_type -> dapplink.CheckAmlAddressResponse
+	13, // 20: dapplink.RiskControllerServices.checkChainTransactions:output_type -> dapplink.CheckChainTransactionsResponse
+	2,  // 21: dapplink.RiskControllerServices.submitWithdraw:output_type -> dapplink.riskWithdrawTransactionResponse
+	5,  // 22: dapplink.RiskControllerServices.checkOfflineWithdraw:output_type -> dapplink.checkOfflineTransactionResponse
 	15, // 23: dapplink.RiskControllerServices.submitTransactionFlow:output_type -> dapplink.transactionFlowResponse
 	17, // 24: dapplink.RiskControllerServices.checkedTransactionFlow:output_type -> dapplink.transactionFlowCheckedResponse
 	19, // [19:25] is the sub-list for method output_type

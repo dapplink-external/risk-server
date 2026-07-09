@@ -11,26 +11,39 @@ import (
 
 	"github.com/ethereum/go-ethereum/log"
 	"github.com/the-web3/mock-risk-server/client/walletapiclient"
+	riskleveldb "github.com/the-web3/mock-risk-server/leveldb"
 	"github.com/the-web3/mock-risk-server/protobuf/riskcontroller"
 )
 
 const MaxRecvMessageSize = 1024 * 1024 * 300
+const defaultLevelDBPath = "./risk-leveldb"
 
 type RiskServerConfig struct {
 	GrpcHostname string
 	GrpcPort     int
+	LevelDBPath  string
+	AccessToken  string
 }
 
 type RiskServerWireServices struct {
 	*RiskServerConfig
 	rpcApiClient *walletapiclient.WalletApiGateWayServiceClient
+	levelStore   *riskleveldb.LevelStore
 	stopped      atomic.Bool
 }
 
 func NewRiskServerWireServices(config *RiskServerConfig, rpcApiClient *walletapiclient.WalletApiGateWayServiceClient) (*RiskServerWireServices, error) {
+	if config.LevelDBPath == "" {
+		config.LevelDBPath = defaultLevelDBPath
+	}
+	levelStore, err := riskleveldb.NewLevelStore(config.LevelDBPath)
+	if err != nil {
+		return nil, err
+	}
 	return &RiskServerWireServices{
 		RiskServerConfig: config,
 		rpcApiClient:     rpcApiClient,
+		levelStore:       levelStore,
 	}, nil
 }
 
@@ -64,6 +77,9 @@ func (rss *RiskServerWireServices) Start(ctx context.Context) error {
 
 func (rss *RiskServerWireServices) Stop(ctx context.Context) error {
 	rss.stopped.Store(true)
+	if rss.levelStore != nil {
+		return rss.levelStore.Close()
+	}
 	return nil
 }
 

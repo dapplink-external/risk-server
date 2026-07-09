@@ -45,6 +45,33 @@ var (
 		Value:    7214,
 		Required: true,
 	}
+
+	ApiGateWayRpcFlag = &cli.StringFlag{
+		Name:     "api-gateway-rpc",
+		Usage:    "The gateway rpc of the api",
+		EnvVars:  prefixEnvVars("API_GATEWAY_RPC"),
+		Required: true,
+	}
+
+	LevelDbPathFlag = &cli.StringFlag{
+		Name:     "leveldb-path",
+		Usage:    "The path of leveldb ",
+		EnvVars:  prefixEnvVars("LEVELDB_PATH"),
+		Required: true,
+	}
+	RiskKeyFlag = &cli.StringFlag{
+		Name:     "risk-key",
+		Usage:    "The risk key of the risk controller",
+		EnvVars:  prefixEnvVars("RISK_KEY"),
+		Required: true,
+	}
+
+	AccessTokenFlag = &cli.StringFlag{
+		Name:     "access-token",
+		Usage:    "The access token risk controller",
+		EnvVars:  prefixEnvVars("ACCESS_TOKEN"),
+		Required: true,
+	}
 )
 
 var requireFlags = []cli.Flag{
@@ -54,6 +81,11 @@ var requireFlags = []cli.Flag{
 	RpcPortFlag,
 	MetricsPortFlag,
 	MetricsHostFlag,
+
+	ApiGateWayRpcFlag,
+	LevelDbPathFlag,
+	RiskKeyFlag,
+	AccessTokenFlag,
 }
 
 var optionalFlags = []cli.Flag{}

@@ -26,6 +26,8 @@ func runRpc(ctx *cli.Context, shutdown context.CancelCauseFunc) (cliapp.Lifecycl
 	ristServerConfig := &services.RiskServerConfig{
 		GrpcHostname: cfg.RpcServer.Host,
 		GrpcPort:     cfg.RpcServer.Port,
+		LevelDBPath:  cfg.LevelDbPath,
+		AccessToken:  cfg.AccessToken,
 	}
 
 	connApi, err := grpc.NewClient(cfg.ApiGateWayRpc, grpc.WithTransportCredentials(insecure.NewCredentials()))

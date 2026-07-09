@@ -19,10 +19,10 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	RiskControllerServices_SubmitWithdraw_FullMethodName         = "/dapplink.RiskControllerServices/submitWithdraw"
-	RiskControllerServices_CheckOfflineWithdraw_FullMethodName   = "/dapplink.RiskControllerServices/checkOfflineWithdraw"
 	RiskControllerServices_CheckAmlAddress_FullMethodName        = "/dapplink.RiskControllerServices/checkAmlAddress"
 	RiskControllerServices_CheckChainTransactions_FullMethodName = "/dapplink.RiskControllerServices/checkChainTransactions"
+	RiskControllerServices_SubmitWithdraw_FullMethodName         = "/dapplink.RiskControllerServices/submitWithdraw"
+	RiskControllerServices_CheckOfflineWithdraw_FullMethodName   = "/dapplink.RiskControllerServices/checkOfflineWithdraw"
 	RiskControllerServices_SubmitTransactionFlow_FullMethodName  = "/dapplink.RiskControllerServices/submitTransactionFlow"
 	RiskControllerServices_CheckedTransactionFlow_FullMethodName = "/dapplink.RiskControllerServices/checkedTransactionFlow"
 )
@@ -31,10 +31,10 @@ const (
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type RiskControllerServicesClient interface {
-	SubmitWithdraw(ctx context.Context, in *RiskWithdrawTransactionRequest, opts ...grpc.CallOption) (*RiskWithdrawTransactionResponse, error)
-	CheckOfflineWithdraw(ctx context.Context, in *CheckOfflineTransactionRequest, opts ...grpc.CallOption) (*CheckOfflineTransactionResponse, error)
 	CheckAmlAddress(ctx context.Context, in *CheckAmlAddressRequest, opts ...grpc.CallOption) (*CheckAmlAddressResponse, error)
 	CheckChainTransactions(ctx context.Context, in *CheckChainTransactionsRequest, opts ...grpc.CallOption) (*CheckChainTransactionsResponse, error)
+	SubmitWithdraw(ctx context.Context, in *RiskWithdrawTransactionRequest, opts ...grpc.CallOption) (*RiskWithdrawTransactionResponse, error)
+	CheckOfflineWithdraw(ctx context.Context, in *CheckOfflineTransactionRequest, opts ...grpc.CallOption) (*CheckOfflineTransactionResponse, error)
 	SubmitTransactionFlow(ctx context.Context, in *TransactionFlowRequest, opts ...grpc.CallOption) (*TransactionFlowResponse, error)
 	CheckedTransactionFlow(ctx context.Context, in *TransactionFlowCheckedRequest, opts ...grpc.CallOption) (*TransactionFlowCheckedResponse, error)
 }
@@ -45,24 +45,6 @@ type riskControllerServicesClient struct {
 
 func NewRiskControllerServicesClient(cc grpc.ClientConnInterface) RiskControllerServicesClient {
 	return &riskControllerServicesClient{cc}
-}
-
-func (c *riskControllerServicesClient) SubmitWithdraw(ctx context.Context, in *RiskWithdrawTransactionRequest, opts ...grpc.CallOption) (*RiskWithdrawTransactionResponse, error) {
-	out := new(RiskWithdrawTransactionResponse)
-	err := c.cc.Invoke(ctx, RiskControllerServices_SubmitWithdraw_FullMethodName, in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *riskControllerServicesClient) CheckOfflineWithdraw(ctx context.Context, in *CheckOfflineTransactionRequest, opts ...grpc.CallOption) (*CheckOfflineTransactionResponse, error) {
-	out := new(CheckOfflineTransactionResponse)
-	err := c.cc.Invoke(ctx, RiskControllerServices_CheckOfflineWithdraw_FullMethodName, in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
 }
 
 func (c *riskControllerServicesClient) CheckAmlAddress(ctx context.Context, in *CheckAmlAddressRequest, opts ...grpc.CallOption) (*CheckAmlAddressResponse, error) {
@@ -77,6 +59,24 @@ func (c *riskControllerServicesClient) CheckAmlAddress(ctx context.Context, in *
 func (c *riskControllerServicesClient) CheckChainTransactions(ctx context.Context, in *CheckChainTransactionsRequest, opts ...grpc.CallOption) (*CheckChainTransactionsResponse, error) {
 	out := new(CheckChainTransactionsResponse)
 	err := c.cc.Invoke(ctx, RiskControllerServices_CheckChainTransactions_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *riskControllerServicesClient) SubmitWithdraw(ctx context.Context, in *RiskWithdrawTransactionRequest, opts ...grpc.CallOption) (*RiskWithdrawTransactionResponse, error) {
+	out := new(RiskWithdrawTransactionResponse)
+	err := c.cc.Invoke(ctx, RiskControllerServices_SubmitWithdraw_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *riskControllerServicesClient) CheckOfflineWithdraw(ctx context.Context, in *CheckOfflineTransactionRequest, opts ...grpc.CallOption) (*CheckOfflineTransactionResponse, error) {
+	out := new(CheckOfflineTransactionResponse)
+	err := c.cc.Invoke(ctx, RiskControllerServices_CheckOfflineWithdraw_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -105,10 +105,10 @@ func (c *riskControllerServicesClient) CheckedTransactionFlow(ctx context.Contex
 // All implementations should embed UnimplementedRiskControllerServicesServer
 // for forward compatibility
 type RiskControllerServicesServer interface {
-	SubmitWithdraw(context.Context, *RiskWithdrawTransactionRequest) (*RiskWithdrawTransactionResponse, error)
-	CheckOfflineWithdraw(context.Context, *CheckOfflineTransactionRequest) (*CheckOfflineTransactionResponse, error)
 	CheckAmlAddress(context.Context, *CheckAmlAddressRequest) (*CheckAmlAddressResponse, error)
 	CheckChainTransactions(context.Context, *CheckChainTransactionsRequest) (*CheckChainTransactionsResponse, error)
+	SubmitWithdraw(context.Context, *RiskWithdrawTransactionRequest) (*RiskWithdrawTransactionResponse, error)
+	CheckOfflineWithdraw(context.Context, *CheckOfflineTransactionRequest) (*CheckOfflineTransactionResponse, error)
 	SubmitTransactionFlow(context.Context, *TransactionFlowRequest) (*TransactionFlowResponse, error)
 	CheckedTransactionFlow(context.Context, *TransactionFlowCheckedRequest) (*TransactionFlowCheckedResponse, error)
 }
@@ -117,17 +117,17 @@ type RiskControllerServicesServer interface {
 type UnimplementedRiskControllerServicesServer struct {
 }
 
-func (UnimplementedRiskControllerServicesServer) SubmitWithdraw(context.Context, *RiskWithdrawTransactionRequest) (*RiskWithdrawTransactionResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method SubmitWithdraw not implemented")
-}
-func (UnimplementedRiskControllerServicesServer) CheckOfflineWithdraw(context.Context, *CheckOfflineTransactionRequest) (*CheckOfflineTransactionResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method CheckOfflineWithdraw not implemented")
-}
 func (UnimplementedRiskControllerServicesServer) CheckAmlAddress(context.Context, *CheckAmlAddressRequest) (*CheckAmlAddressResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CheckAmlAddress not implemented")
 }
 func (UnimplementedRiskControllerServicesServer) CheckChainTransactions(context.Context, *CheckChainTransactionsRequest) (*CheckChainTransactionsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CheckChainTransactions not implemented")
+}
+func (UnimplementedRiskControllerServicesServer) SubmitWithdraw(context.Context, *RiskWithdrawTransactionRequest) (*RiskWithdrawTransactionResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SubmitWithdraw not implemented")
+}
+func (UnimplementedRiskControllerServicesServer) CheckOfflineWithdraw(context.Context, *CheckOfflineTransactionRequest) (*CheckOfflineTransactionResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CheckOfflineWithdraw not implemented")
 }
 func (UnimplementedRiskControllerServicesServer) SubmitTransactionFlow(context.Context, *TransactionFlowRequest) (*TransactionFlowResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method SubmitTransactionFlow not implemented")
@@ -145,42 +145,6 @@ type UnsafeRiskControllerServicesServer interface {
 
 func RegisterRiskControllerServicesServer(s grpc.ServiceRegistrar, srv RiskControllerServicesServer) {
 	s.RegisterService(&RiskControllerServices_ServiceDesc, srv)
-}
-
-func _RiskControllerServices_SubmitWithdraw_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(RiskWithdrawTransactionRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(RiskControllerServicesServer).SubmitWithdraw(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: RiskControllerServices_SubmitWithdraw_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(RiskControllerServicesServer).SubmitWithdraw(ctx, req.(*RiskWithdrawTransactionRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _RiskControllerServices_CheckOfflineWithdraw_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(CheckOfflineTransactionRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(RiskControllerServicesServer).CheckOfflineWithdraw(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: RiskControllerServices_CheckOfflineWithdraw_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(RiskControllerServicesServer).CheckOfflineWithdraw(ctx, req.(*CheckOfflineTransactionRequest))
-	}
-	return interceptor(ctx, in, info, handler)
 }
 
 func _RiskControllerServices_CheckAmlAddress_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
@@ -215,6 +179,42 @@ func _RiskControllerServices_CheckChainTransactions_Handler(srv interface{}, ctx
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(RiskControllerServicesServer).CheckChainTransactions(ctx, req.(*CheckChainTransactionsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _RiskControllerServices_SubmitWithdraw_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(RiskWithdrawTransactionRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(RiskControllerServicesServer).SubmitWithdraw(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: RiskControllerServices_SubmitWithdraw_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(RiskControllerServicesServer).SubmitWithdraw(ctx, req.(*RiskWithdrawTransactionRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _RiskControllerServices_CheckOfflineWithdraw_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CheckOfflineTransactionRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(RiskControllerServicesServer).CheckOfflineWithdraw(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: RiskControllerServices_CheckOfflineWithdraw_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(RiskControllerServicesServer).CheckOfflineWithdraw(ctx, req.(*CheckOfflineTransactionRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -263,20 +263,20 @@ var RiskControllerServices_ServiceDesc = grpc.ServiceDesc{
 	HandlerType: (*RiskControllerServicesServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "submitWithdraw",
-			Handler:    _RiskControllerServices_SubmitWithdraw_Handler,
-		},
-		{
-			MethodName: "checkOfflineWithdraw",
-			Handler:    _RiskControllerServices_CheckOfflineWithdraw_Handler,
-		},
-		{
 			MethodName: "checkAmlAddress",
 			Handler:    _RiskControllerServices_CheckAmlAddress_Handler,
 		},
 		{
 			MethodName: "checkChainTransactions",
 			Handler:    _RiskControllerServices_CheckChainTransactions_Handler,
+		},
+		{
+			MethodName: "submitWithdraw",
+			Handler:    _RiskControllerServices_SubmitWithdraw_Handler,
+		},
+		{
+			MethodName: "checkOfflineWithdraw",
+			Handler:    _RiskControllerServices_CheckOfflineWithdraw_Handler,
 		},
 		{
 			MethodName: "submitTransactionFlow",
