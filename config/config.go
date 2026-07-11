@@ -3,7 +3,7 @@ package config
 import (
 	"github.com/urfave/cli/v2"
 
-	"github.com/the-web3/mock-risk-server/flags"
+	"github.com/dapplink-external/risk-server/flags"
 )
 
 type Config struct {

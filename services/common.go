@@ -8,8 +8,8 @@ import (
 	"strconv"
 	"strings"
 
+	"github.com/dapplink-external/risk-server/protobuf/riskcontroller"
 	"github.com/syndtr/goleveldb/leveldb/errors"
-	"github.com/the-web3/mock-risk-server/protobuf/riskcontroller"
 )
 
 func parseAmount(amount string) (int64, error) {

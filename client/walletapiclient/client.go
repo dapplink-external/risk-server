@@ -7,8 +7,8 @@ import (
 	"github.com/cockroachdb/errors"
 	"github.com/ethereum/go-ethereum/log"
 
-	"github.com/the-web3/mock-risk-server/protobuf/common"
-	"github.com/the-web3/mock-risk-server/protobuf/walletapi"
+	"github.com/dapplink-external/risk-server/protobuf/common"
+	"github.com/dapplink-external/risk-server/protobuf/walletapi"
 )
 
 const ConsumerToken = "DappLinkTheWeb3202402290001"
@@ -20,7 +20,7 @@ type WalletApiGateWayServiceClient struct {
 }
 
 func NewWalletApiGateWayServiceClient(ctx context.Context, rpcClient walletapi.WalletApiGateWayServiceClient, chainId string) (*WalletApiGateWayServiceClient, error) {
-	log.Info("New wallet api gate way rpc client", "ChainId", chainId)
+	log.Info("New risk rpc server", "ChainId", chainId)
 	return &WalletApiGateWayServiceClient{Ctx: ctx, RpcClient: rpcClient, ChainId: chainId}, nil
 }
 

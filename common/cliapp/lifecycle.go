@@ -7,7 +7,7 @@ import (
 
 	"github.com/urfave/cli/v2"
 
-	"github.com/the-web3/mock-risk-server/common/opio"
+	"github.com/dapplink-external/risk-server/common/opio"
 )
 
 // Lifecycle 接口定义了应用程序的生命周期管理方法。

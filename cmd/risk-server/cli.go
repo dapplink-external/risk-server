@@ -9,12 +9,12 @@ import (
 
 	"github.com/ethereum/go-ethereum/log"
 
-	"github.com/the-web3/mock-risk-server/client/walletapiclient"
-	"github.com/the-web3/mock-risk-server/common/cliapp"
-	"github.com/the-web3/mock-risk-server/config"
-	flags2 "github.com/the-web3/mock-risk-server/flags"
-	"github.com/the-web3/mock-risk-server/protobuf/walletapi"
-	"github.com/the-web3/mock-risk-server/services"
+	"github.com/dapplink-external/risk-server/client/walletapiclient"
+	"github.com/dapplink-external/risk-server/common/cliapp"
+	"github.com/dapplink-external/risk-server/config"
+	flags2 "github.com/dapplink-external/risk-server/flags"
+	"github.com/dapplink-external/risk-server/protobuf/walletapi"
+	"github.com/dapplink-external/risk-server/services"
 )
 
 func runRpc(ctx *cli.Context, shutdown context.CancelCauseFunc) (cliapp.Lifecycle, error) {

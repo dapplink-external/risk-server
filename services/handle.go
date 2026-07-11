@@ -7,8 +7,8 @@ import (
 	"github.com/ethereum/go-ethereum/log"
 	"github.com/syndtr/goleveldb/leveldb/errors"
 
-	"github.com/the-web3/mock-risk-server/protobuf/common"
-	"github.com/the-web3/mock-risk-server/protobuf/riskcontroller"
+	"github.com/dapplink-external/risk-server/protobuf/common"
+	"github.com/dapplink-external/risk-server/protobuf/riskcontroller"
 )
 
 const RiskKey = "10000"

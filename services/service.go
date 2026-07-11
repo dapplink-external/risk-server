@@ -9,10 +9,10 @@ import (
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
 
+	"github.com/dapplink-external/risk-server/client/walletapiclient"
+	riskleveldb "github.com/dapplink-external/risk-server/leveldb"
+	"github.com/dapplink-external/risk-server/protobuf/riskcontroller"
 	"github.com/ethereum/go-ethereum/log"
-	"github.com/the-web3/mock-risk-server/client/walletapiclient"
-	riskleveldb "github.com/the-web3/mock-risk-server/leveldb"
-	"github.com/the-web3/mock-risk-server/protobuf/riskcontroller"
 )
 
 const MaxRecvMessageSize = 1024 * 1024 * 300

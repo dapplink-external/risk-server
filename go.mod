@@ -1,4 +1,4 @@
-module github.com/the-web3/mock-risk-server
+module github.com/dapplink-external/risk-server
 
 go 1.25.0
 
