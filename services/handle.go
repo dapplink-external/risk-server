@@ -17,6 +17,13 @@ const withdrawVerifiedKeyPrefix = "withdraw_verified"
 const transactionFlowKeyPrefix = "transaction_flow"
 
 func (rss *RiskServerWireServices) SubmitWithdraw(ctx context.Context, request *riskcontroller.RiskWithdrawTransactionRequest) (*riskcontroller.RiskWithdrawTransactionResponse, error) {
+	log.Info("SubmitWithdraw called", "consumer_token", request.GetConsumerToken(), "withdraw_txn_count", len(request.GetWithdrawTxn()))
+	for i, tx := range request.GetWithdrawTxn() {
+		if tx != nil {
+			log.Info("SubmitWithdraw transaction", "index", i, "request_id", tx.GetRequestId(), "business_id", tx.GetBusinessId(), "chain_id", tx.GetChainId(), "from", tx.GetFrom(), "to", tx.GetTo(), "value", tx.GetValue(), "contract_address", tx.GetContractAddress())
+		}
+	}
+
 	if rss.AccessToken != request.GetConsumerToken() {
 		return &riskcontroller.RiskWithdrawTransactionResponse{
 			Code: common.ReturnCode_ERROR,
@@ -52,6 +59,13 @@ func (rss *RiskServerWireServices) SubmitWithdraw(ctx context.Context, request *
 }
 
 func (rss *RiskServerWireServices) CheckOfflineWithdraw(ctx context.Context, request *riskcontroller.CheckOfflineTransactionRequest) (*riskcontroller.CheckOfflineTransactionResponse, error) {
+	log.Info("CheckOfflineWithdraw called", "consumer_token", request.GetConsumerToken(), "check_offline_txn_count", len(request.GetCheckOfflineTxn()))
+	for i, tx := range request.GetCheckOfflineTxn() {
+		if tx != nil {
+			log.Info("CheckOfflineWithdraw transaction", "index", i, "request_id", tx.GetRequestId(), "business_id", tx.GetBusinessId(), "chain_id", tx.GetChainId(), "from", tx.GetFrom(), "to", tx.GetTo(), "value", tx.GetValue(), "contract_address", tx.GetContractAddress())
+		}
+	}
+
 	if rss.AccessToken != request.GetConsumerToken() {
 		return &riskcontroller.CheckOfflineTransactionResponse{
 			Code: common.ReturnCode_ERROR,
