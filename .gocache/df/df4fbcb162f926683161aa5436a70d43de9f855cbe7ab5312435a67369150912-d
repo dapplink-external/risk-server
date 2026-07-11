@@ -1,0 +1,2 @@
+./walletapi.pb.go
+./walletapi_grpc.pb.go

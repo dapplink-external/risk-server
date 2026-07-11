@@ -9,6 +9,7 @@ import (
 	"strings"
 
 	"github.com/dapplink-external/risk-server/protobuf/riskcontroller"
+	ethcommon "github.com/ethereum/go-ethereum/common"
 	"github.com/syndtr/goleveldb/leveldb/errors"
 )
 
@@ -40,6 +41,7 @@ func hashWithdrawTx(tx *riskcontroller.WithdrawTxList) (string, error) {
 }
 
 func hashCanonicalWithdrawTx(tx canonicalWithdrawTx) (string, error) {
+	tx = normalizeCanonicalWithdrawTx(tx)
 	value, err := json.Marshal(tx)
 	if err != nil {
 		return "", err
@@ -68,7 +70,7 @@ func (rss *RiskServerWireServices) getTransactionFlow() (*transactionFlowValue, 
 }
 
 func toCanonicalWithdrawTx(tx *riskcontroller.WithdrawTxList) canonicalWithdrawTx {
-	return canonicalWithdrawTx{
+	return normalizeCanonicalWithdrawTx(canonicalWithdrawTx{
 		RequestId:       tx.GetRequestId(),
 		BusinessTxId:    tx.GetBusinessId(),
 		ChainId:         tx.GetChainId(),
@@ -78,5 +80,20 @@ func toCanonicalWithdrawTx(tx *riskcontroller.WithdrawTxList) canonicalWithdrawT
 		ContractAddress: tx.GetContractAddress(),
 		TokenId:         tx.GetTokenId(),
 		TokenMeta:       tx.GetTokenMeta(),
+	})
+}
+
+func normalizeCanonicalWithdrawTx(tx canonicalWithdrawTx) canonicalWithdrawTx {
+	tx.From = normalizeHexAddress(tx.From)
+	tx.To = normalizeHexAddress(tx.To)
+	tx.ContractAddress = normalizeHexAddress(tx.ContractAddress)
+	return tx
+}
+
+func normalizeHexAddress(address string) string {
+	address = strings.TrimSpace(address)
+	if !ethcommon.IsHexAddress(address) {
+		return address
 	}
+	return ethcommon.HexToAddress(address).Hex()
 }
