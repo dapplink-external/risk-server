@@ -36,7 +36,11 @@ func transactionFlowKey(requestID string, userAddress string) string {
 }
 
 func hashWithdrawTx(tx *riskcontroller.WithdrawTxList) (string, error) {
-	value, err := json.Marshal(toCanonicalWithdrawTx(tx))
+	return hashCanonicalWithdrawTx(toCanonicalWithdrawTx(tx))
+}
+
+func hashCanonicalWithdrawTx(tx canonicalWithdrawTx) (string, error) {
+	value, err := json.Marshal(tx)
 	if err != nil {
 		return "", err
 	}

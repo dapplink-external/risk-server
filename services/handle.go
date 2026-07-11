@@ -103,7 +103,20 @@ func (rss *RiskServerWireServices) CheckOfflineWithdraw(ctx context.Context, req
 				TxResult: txResults,
 			}, nil
 		}
-		requestHash, err := hashWithdrawTx(tx)
+		var storedTx canonicalWithdrawTx
+		err = json.Unmarshal(storedValue, &storedTx)
+		if err != nil {
+			log.Error("unmarshal withdraw tx failed", "err", err)
+			return &riskcontroller.CheckOfflineTransactionResponse{
+				Code: common.ReturnCode_ERROR,
+				Msg:  "unmarshal store withdraw tx failed",
+			}, nil
+		}
+
+		requestTx := toCanonicalWithdrawTx(tx)
+		log.Info("get withdraw tx success request tx and store tx", "storedTx", storedTx, "requestTx", requestTx)
+
+		requestHash, err := hashCanonicalWithdrawTx(requestTx)
 		if err != nil {
 			log.Error("hash request withdraw tx failed", "err", err)
 			return &riskcontroller.CheckOfflineTransactionResponse{
@@ -112,9 +125,18 @@ func (rss *RiskServerWireServices) CheckOfflineWithdraw(ctx context.Context, req
 				TxResult: txResults,
 			}, nil
 		}
-		storedHash := hashBytes(storedValue)
+		storedHash, err := hashCanonicalWithdrawTx(storedTx)
+		if err != nil {
+			log.Error("hash stored withdraw tx failed", "err", err)
+			return &riskcontroller.CheckOfflineTransactionResponse{
+				Code:     common.ReturnCode_ERROR,
+				Msg:      "hash stored withdraw transaction failed",
+				TxResult: txResults,
+			}, nil
+		}
 
 		// 3. hash 不匹配：校验失败，不写入幂等键，允许重试。
+		log.Info("check withdraw tx requestHash and storedHash", "requestHash", requestHash, "storedHash", storedHash)
 		if requestHash != storedHash {
 			txResults = append(txResults, &riskcontroller.CheckOfflineTxResult{
 				BusinessTxId: tx.GetRequestId(),
