@@ -13,6 +13,7 @@ import (
 
 const RiskKey = "10000"
 const withdrawTxKeyPrefix = "withdraw_tx"
+const withdrawVerifiedKeyPrefix = "withdraw_verified"
 const transactionFlowKeyPrefix = "transaction_flow"
 
 func (rss *RiskServerWireServices) SubmitWithdraw(ctx context.Context, request *riskcontroller.RiskWithdrawTransactionRequest) (*riskcontroller.RiskWithdrawTransactionResponse, error) {
@@ -27,7 +28,7 @@ func (rss *RiskServerWireServices) SubmitWithdraw(ctx context.Context, request *
 			log.Error("nil transaction")
 			continue
 		}
-		key := withdrawTxKey(tx.GetRequestId(), tx.GetBusinessTxId(), tx.GetChainId())
+		key := withdrawTxKey(tx.GetRequestId(), tx.GetBusinessId(), tx.GetChainId())
 		value, err := json.Marshal(toCanonicalWithdrawTx(tx))
 		if err != nil {
 			log.Error("marshal withdraw tx failed", "err", err)
@@ -62,13 +63,36 @@ func (rss *RiskServerWireServices) CheckOfflineWithdraw(ctx context.Context, req
 		if tx == nil {
 			continue
 		}
-		key := withdrawTxKey(tx.GetRequestId(), tx.GetBusinessTxId(), tx.GetChainId())
+		verifiedKey := withdrawVerifiedKey(tx.GetRequestId(), tx.GetBusinessId(), tx.GetChainId())
+
+		// 1. 幂等检查：该笔是否已校验通过。命中则直接返回“重复校验”，不再走后续逻辑。
+		verifiedHash, err := rss.levelStore.Get([]byte(verifiedKey))
+		if err != nil && err != errors.ErrNotFound {
+			log.Error("get withdraw verified state failed", "err", err, "key", verifiedKey)
+			return &riskcontroller.CheckOfflineTransactionResponse{
+				Code:     common.ReturnCode_ERROR,
+				Msg:      "get withdraw verified state failed",
+				TxResult: txResults,
+			}, nil
+		}
+		if err == nil {
+			txResults = append(txResults, &riskcontroller.CheckOfflineTxResult{
+				BusinessTxId: tx.GetRequestId(),
+				Status:       riskcontroller.CheckOfflineTxStatus_CHECK_DUPLICATE,
+				RiskKeyHash:  string(verifiedHash),
+			})
+			continue
+		}
+
+		// 2. 未校验过：读取已提交的原始交易，比对 hash。
+		key := withdrawTxKey(tx.GetRequestId(), tx.GetBusinessId(), tx.GetChainId())
 		storedValue, err := rss.levelStore.Get([]byte(key))
 		if err != nil {
 			if err == errors.ErrNotFound {
+				// 未提交，校验失败，不写入幂等键，允许后续重试。
 				txResults = append(txResults, &riskcontroller.CheckOfflineTxResult{
-					BusinessTxId: tx.GetBusinessTxId(),
-					IsPassed:     false,
+					BusinessTxId: tx.GetRequestId(),
+					Status:       riskcontroller.CheckOfflineTxStatus_CHECK_FAILED,
 				})
 				continue
 			}
@@ -89,9 +113,29 @@ func (rss *RiskServerWireServices) CheckOfflineWithdraw(ctx context.Context, req
 			}, nil
 		}
 		storedHash := hashBytes(storedValue)
+
+		// 3. hash 不匹配：校验失败，不写入幂等键，允许重试。
+		if requestHash != storedHash {
+			txResults = append(txResults, &riskcontroller.CheckOfflineTxResult{
+				BusinessTxId: tx.GetRequestId(),
+				Status:       riskcontroller.CheckOfflineTxStatus_CHECK_FAILED,
+				RiskKeyHash:  storedHash,
+			})
+			continue
+		}
+
+		// 4. 校验通过：落最终状态（幂等键），后续再次校验将返回“重复校验”。
+		if err := rss.levelStore.Put([]byte(verifiedKey), []byte(storedHash)); err != nil {
+			log.Error("store withdraw verified state failed", "err", err, "key", verifiedKey)
+			return &riskcontroller.CheckOfflineTransactionResponse{
+				Code:     common.ReturnCode_ERROR,
+				Msg:      "store withdraw verified state failed",
+				TxResult: txResults,
+			}, nil
+		}
 		txResults = append(txResults, &riskcontroller.CheckOfflineTxResult{
-			BusinessTxId: tx.GetBusinessTxId(),
-			IsPassed:     requestHash == storedHash,
+			BusinessTxId: tx.GetRequestId(),
+			Status:       riskcontroller.CheckOfflineTxStatus_CHECK_SUCCESS,
 			RiskKeyHash:  storedHash,
 		})
 	}

@@ -24,6 +24,13 @@ func withdrawTxKey(requestID string, businessTxID string, chainID string) string
 	return fmt.Sprintf("%s:%s:%s:%s", withdrawTxKeyPrefix, requestID, businessTxID, chainID)
 }
 
+// withdrawVerifiedKey 标记某笔离线提现已校验通过的幂等键。
+// 校验通过后写入（值为通过时的 hash），后续再次校验直接命中返回“重复校验”。
+// 校验失败时不写入，因此允许重试。
+func withdrawVerifiedKey(requestID string, businessTxID string, chainID string) string {
+	return fmt.Sprintf("%s:%s:%s:%s", withdrawVerifiedKeyPrefix, requestID, businessTxID, chainID)
+}
+
 func transactionFlowKey(requestID string, userAddress string) string {
 	return fmt.Sprintf("%s:%s:%s", transactionFlowKeyPrefix, requestID, userAddress)
 }
@@ -59,7 +66,7 @@ func (rss *RiskServerWireServices) getTransactionFlow() (*transactionFlowValue, 
 func toCanonicalWithdrawTx(tx *riskcontroller.WithdrawTxList) canonicalWithdrawTx {
 	return canonicalWithdrawTx{
 		RequestId:       tx.GetRequestId(),
-		BusinessTxId:    tx.GetBusinessTxId(),
+		BusinessTxId:    tx.GetBusinessId(),
 		ChainId:         tx.GetChainId(),
 		From:            tx.GetFrom(),
 		To:              tx.GetTo(),
