@@ -7,7 +7,7 @@
 package dapplinkwallet
 
 import (
-	common "github.com/the-web3/mock-risk-server/protobuf/common"
+	"github.com/the-web3/mock-risk-server/protobuf/common"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	reflect "reflect"
@@ -154,7 +154,7 @@ func (x *Token) GetColdAmount() string {
 type BusinessRegisterRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	ConsumerToken string                 `protobuf:"bytes,1,opt,name=consumer_token,json=consumerToken,proto3" json:"consumer_token,omitempty"`
-	RequestId     string                 `protobuf:"bytes,2,opt,name=request_id,json=requestId,proto3" json:"request_id,omitempty"`
+	BusinessId    string                 `protobuf:"bytes,2,opt,name=business_id,json=businessId,proto3" json:"business_id,omitempty"`
 	NotifyUrl     string                 `protobuf:"bytes,3,opt,name=notify_url,json=notifyUrl,proto3" json:"notify_url,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
@@ -197,9 +197,9 @@ func (x *BusinessRegisterRequest) GetConsumerToken() string {
 	return ""
 }
 
-func (x *BusinessRegisterRequest) GetRequestId() string {
+func (x *BusinessRegisterRequest) GetBusinessId() string {
 	if x != nil {
-		return x.RequestId
+		return x.BusinessId
 	}
 	return ""
 }
@@ -266,7 +266,7 @@ func (x *BusinessRegisterResponse) GetMsg() string {
 type ExportAddressesRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	ConsumerToken string                 `protobuf:"bytes,1,opt,name=consumer_token,json=consumerToken,proto3" json:"consumer_token,omitempty"`
-	RequestId     string                 `protobuf:"bytes,2,opt,name=request_id,json=requestId,proto3" json:"request_id,omitempty"`
+	BusinessId    string                 `protobuf:"bytes,2,opt,name=business_id,json=businessId,proto3" json:"business_id,omitempty"`
 	PublicKeys    []*common.PublicKey    `protobuf:"bytes,3,rep,name=public_keys,json=publicKeys,proto3" json:"public_keys,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
@@ -309,9 +309,9 @@ func (x *ExportAddressesRequest) GetConsumerToken() string {
 	return ""
 }
 
-func (x *ExportAddressesRequest) GetRequestId() string {
+func (x *ExportAddressesRequest) GetBusinessId() string {
 	if x != nil {
-		return x.RequestId
+		return x.BusinessId
 	}
 	return ""
 }
@@ -385,14 +385,15 @@ func (x *ExportAddressesResponse) GetAddresses() []*Address {
 
 type WithdrawTxn struct {
 	state           protoimpl.MessageState `protogen:"open.v1"`
-	RequestId       string                 `protobuf:"bytes,1,opt,name=request_id,json=requestId,proto3" json:"request_id,omitempty"`
-	ChainId         string                 `protobuf:"bytes,2,opt,name=chain_id,json=chainId,proto3" json:"chain_id,omitempty"`
-	From            string                 `protobuf:"bytes,3,opt,name=from,proto3" json:"from,omitempty"`
-	To              string                 `protobuf:"bytes,4,opt,name=to,proto3" json:"to,omitempty"`
-	Value           string                 `protobuf:"bytes,5,opt,name=value,proto3" json:"value,omitempty"`
-	ContractAddress string                 `protobuf:"bytes,6,opt,name=contract_address,json=contractAddress,proto3" json:"contract_address,omitempty"`
-	TokenId         string                 `protobuf:"bytes,7,opt,name=token_id,json=tokenId,proto3" json:"token_id,omitempty"`
-	TokenMeta       string                 `protobuf:"bytes,8,opt,name=token_meta,json=tokenMeta,proto3" json:"token_meta,omitempty"`
+	BusinessId      string                 `protobuf:"bytes,1,opt,name=business_id,json=businessId,proto3" json:"business_id,omitempty"`
+	RequestId       string                 `protobuf:"bytes,2,opt,name=request_id,json=requestId,proto3" json:"request_id,omitempty"`
+	ChainId         string                 `protobuf:"bytes,3,opt,name=chain_id,json=chainId,proto3" json:"chain_id,omitempty"`
+	From            string                 `protobuf:"bytes,4,opt,name=from,proto3" json:"from,omitempty"`
+	To              string                 `protobuf:"bytes,5,opt,name=to,proto3" json:"to,omitempty"`
+	Value           string                 `protobuf:"bytes,6,opt,name=value,proto3" json:"value,omitempty"`
+	ContractAddress string                 `protobuf:"bytes,7,opt,name=contract_address,json=contractAddress,proto3" json:"contract_address,omitempty"`
+	TokenId         string                 `protobuf:"bytes,8,opt,name=token_id,json=tokenId,proto3" json:"token_id,omitempty"`
+	TokenMeta       string                 `protobuf:"bytes,9,opt,name=token_meta,json=tokenMeta,proto3" json:"token_meta,omitempty"`
 	unknownFields   protoimpl.UnknownFields
 	sizeCache       protoimpl.SizeCache
 }
@@ -425,6 +426,13 @@ func (x *WithdrawTxn) ProtoReflect() protoreflect.Message {
 // Deprecated: Use WithdrawTxn.ProtoReflect.Descriptor instead.
 func (*WithdrawTxn) Descriptor() ([]byte, []int) {
 	return file_dapplink_wallerpcservice_proto_rawDescGZIP(), []int{6}
+}
+
+func (x *WithdrawTxn) GetBusinessId() string {
+	if x != nil {
+		return x.BusinessId
+	}
+	return ""
 }
 
 func (x *WithdrawTxn) GetRequestId() string {
@@ -590,7 +598,7 @@ func (x *WithdrawTransactionResponse) GetMsg() string {
 type SetTokenAddressRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	ConsumerToken string                 `protobuf:"bytes,1,opt,name=consumer_token,json=consumerToken,proto3" json:"consumer_token,omitempty"`
-	RequestId     string                 `protobuf:"bytes,2,opt,name=request_id,json=requestId,proto3" json:"request_id,omitempty"`
+	BusinessId    string                 `protobuf:"bytes,2,opt,name=business_id,json=businessId,proto3" json:"business_id,omitempty"`
 	TokenList     []*Token               `protobuf:"bytes,3,rep,name=token_list,json=tokenList,proto3" json:"token_list,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
@@ -633,9 +641,9 @@ func (x *SetTokenAddressRequest) GetConsumerToken() string {
 	return ""
 }
 
-func (x *SetTokenAddressRequest) GetRequestId() string {
+func (x *SetTokenAddressRequest) GetBusinessId() string {
 	if x != nil {
-		return x.RequestId
+		return x.BusinessId
 	}
 	return ""
 }
@@ -702,7 +710,7 @@ func (x *SetTokenAddressResponse) GetMsg() string {
 type CreateAddressRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	ConsumerToken string                 `protobuf:"bytes,1,opt,name=consumer_token,json=consumerToken,proto3" json:"consumer_token,omitempty"`
-	RequestId     string                 `protobuf:"bytes,2,opt,name=request_id,json=requestId,proto3" json:"request_id,omitempty"`
+	BusinessId    string                 `protobuf:"bytes,2,opt,name=business_id,json=businessId,proto3" json:"business_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -744,9 +752,9 @@ func (x *CreateAddressRequest) GetConsumerToken() string {
 	return ""
 }
 
-func (x *CreateAddressRequest) GetRequestId() string {
+func (x *CreateAddressRequest) GetBusinessId() string {
 	if x != nil {
-		return x.RequestId
+		return x.BusinessId
 	}
 	return ""
 }
@@ -834,56 +842,58 @@ const file_dapplink_wallerpcservice_proto_rawDesc = "" +
 	"token_name\x18\x03 \x01(\tR\ttokenName\x12%\n" +
 	"\x0ecollect_amount\x18\x04 \x01(\tR\rcollectAmount\x12\x1f\n" +
 	"\vcold_amount\x18\x05 \x01(\tR\n" +
-	"coldAmount\"~\n" +
+	"coldAmount\"\x80\x01\n" +
 	"\x17BusinessRegisterRequest\x12%\n" +
-	"\x0econsumer_token\x18\x01 \x01(\tR\rconsumerToken\x12\x1d\n" +
-	"\n" +
-	"request_id\x18\x02 \x01(\tR\trequestId\x12\x1d\n" +
+	"\x0econsumer_token\x18\x01 \x01(\tR\rconsumerToken\x12\x1f\n" +
+	"\vbusiness_id\x18\x02 \x01(\tR\n" +
+	"businessId\x12\x1d\n" +
 	"\n" +
 	"notify_url\x18\x03 \x01(\tR\tnotifyUrl\"V\n" +
 	"\x18BusinessRegisterResponse\x12(\n" +
 	"\x04Code\x18\x01 \x01(\x0e2\x14.dapplink.ReturnCodeR\x04Code\x12\x10\n" +
-	"\x03Msg\x18\x02 \x01(\tR\x03Msg\"\x94\x01\n" +
+	"\x03Msg\x18\x02 \x01(\tR\x03Msg\"\x96\x01\n" +
 	"\x16ExportAddressesRequest\x12%\n" +
-	"\x0econsumer_token\x18\x01 \x01(\tR\rconsumerToken\x12\x1d\n" +
-	"\n" +
-	"request_id\x18\x02 \x01(\tR\trequestId\x124\n" +
+	"\x0econsumer_token\x18\x01 \x01(\tR\rconsumerToken\x12\x1f\n" +
+	"\vbusiness_id\x18\x02 \x01(\tR\n" +
+	"businessId\x124\n" +
 	"\vpublic_keys\x18\x03 \x03(\v2\x13.dapplink.PublicKeyR\n" +
 	"publicKeys\"\x86\x01\n" +
 	"\x17ExportAddressesResponse\x12(\n" +
 	"\x04Code\x18\x01 \x01(\x0e2\x14.dapplink.ReturnCodeR\x04Code\x12\x10\n" +
 	"\x03msg\x18\x02 \x01(\tR\x03msg\x12/\n" +
-	"\taddresses\x18\x03 \x03(\v2\x11.dapplink.AddressR\taddresses\"\xe6\x01\n" +
-	"\vWithdrawTxn\x12\x1d\n" +
+	"\taddresses\x18\x03 \x03(\v2\x11.dapplink.AddressR\taddresses\"\x87\x02\n" +
+	"\vWithdrawTxn\x12\x1f\n" +
+	"\vbusiness_id\x18\x01 \x01(\tR\n" +
+	"businessId\x12\x1d\n" +
 	"\n" +
-	"request_id\x18\x01 \x01(\tR\trequestId\x12\x19\n" +
-	"\bchain_id\x18\x02 \x01(\tR\achainId\x12\x12\n" +
-	"\x04from\x18\x03 \x01(\tR\x04from\x12\x0e\n" +
-	"\x02to\x18\x04 \x01(\tR\x02to\x12\x14\n" +
-	"\x05value\x18\x05 \x01(\tR\x05value\x12)\n" +
-	"\x10contract_address\x18\x06 \x01(\tR\x0fcontractAddress\x12\x19\n" +
-	"\btoken_id\x18\a \x01(\tR\atokenId\x12\x1d\n" +
+	"request_id\x18\x02 \x01(\tR\trequestId\x12\x19\n" +
+	"\bchain_id\x18\x03 \x01(\tR\achainId\x12\x12\n" +
+	"\x04from\x18\x04 \x01(\tR\x04from\x12\x0e\n" +
+	"\x02to\x18\x05 \x01(\tR\x02to\x12\x14\n" +
+	"\x05value\x18\x06 \x01(\tR\x05value\x12)\n" +
+	"\x10contract_address\x18\a \x01(\tR\x0fcontractAddress\x12\x19\n" +
+	"\btoken_id\x18\b \x01(\tR\atokenId\x12\x1d\n" +
 	"\n" +
-	"token_meta\x18\b \x01(\tR\ttokenMeta\"}\n" +
+	"token_meta\x18\t \x01(\tR\ttokenMeta\"}\n" +
 	"\x1awithdrawTransactionRequest\x12%\n" +
 	"\x0econsumer_token\x18\x01 \x01(\tR\rconsumerToken\x128\n" +
 	"\fwithdraw_txn\x18\x02 \x03(\v2\x15.dapplink.WithdrawTxnR\vwithdrawTxn\"Y\n" +
 	"\x1bwithdrawTransactionResponse\x12(\n" +
 	"\x04code\x18\x01 \x01(\x0e2\x14.dapplink.ReturnCodeR\x04code\x12\x10\n" +
-	"\x03msg\x18\x02 \x01(\tR\x03msg\"\x8e\x01\n" +
+	"\x03msg\x18\x02 \x01(\tR\x03msg\"\x90\x01\n" +
 	"\x16SetTokenAddressRequest\x12%\n" +
-	"\x0econsumer_token\x18\x01 \x01(\tR\rconsumerToken\x12\x1d\n" +
-	"\n" +
-	"request_id\x18\x02 \x01(\tR\trequestId\x12.\n" +
+	"\x0econsumer_token\x18\x01 \x01(\tR\rconsumerToken\x12\x1f\n" +
+	"\vbusiness_id\x18\x02 \x01(\tR\n" +
+	"businessId\x12.\n" +
 	"\n" +
 	"token_list\x18\x03 \x03(\v2\x0f.dapplink.TokenR\ttokenList\"U\n" +
 	"\x17SetTokenAddressResponse\x12(\n" +
 	"\x04code\x18\x01 \x01(\x0e2\x14.dapplink.ReturnCodeR\x04code\x12\x10\n" +
-	"\x03msg\x18\x02 \x01(\tR\x03msg\"\\\n" +
+	"\x03msg\x18\x02 \x01(\tR\x03msg\"^\n" +
 	"\x14CreateAddressRequest\x12%\n" +
-	"\x0econsumer_token\x18\x01 \x01(\tR\rconsumerToken\x12\x1d\n" +
-	"\n" +
-	"request_id\x18\x02 \x01(\tR\trequestId\"\x81\x01\n" +
+	"\x0econsumer_token\x18\x01 \x01(\tR\rconsumerToken\x12\x1f\n" +
+	"\vbusiness_id\x18\x02 \x01(\tR\n" +
+	"businessId\"\x81\x01\n" +
 	"\x15CreateAddressResponse\x12(\n" +
 	"\x04code\x18\x01 \x01(\x0e2\x14.dapplink.ReturnCodeR\x04code\x12\x10\n" +
 	"\x03msg\x18\x02 \x01(\tR\x03msg\x12\x12\n" +

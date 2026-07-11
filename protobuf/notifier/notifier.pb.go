@@ -7,7 +7,7 @@
 package notifier
 
 import (
-	common "github.com/the-web3/mock-risk-server/protobuf/common"
+	"github.com/the-web3/mock-risk-server/protobuf/common"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	reflect "reflect"
