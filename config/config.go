@@ -29,7 +29,6 @@ func LoadConfig(cliCtx *cli.Context) (Config, error) {
 
 func NewConfig(ctx *cli.Context) Config {
 	return Config{
-		Migrations: ctx.String(flags.MigrationsFlag.Name),
 		RpcServer: ServerConfig{
 			Host: ctx.String(flags.RpcHostFlag.Name),
 			Port: ctx.Int(flags.RpcPortFlag.Name),

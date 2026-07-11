@@ -4,20 +4,13 @@ import (
 	"github.com/urfave/cli/v2"
 )
 
-const envVarPrefix = "WALLET"
+const envVarPrefix = "RISK"
 
 func prefixEnvVars(name string) []string {
 	return []string{envVarPrefix + "_" + name}
 }
 
 var (
-	MigrationsFlag = &cli.StringFlag{
-		Name:    "migrations-dir",
-		Value:   "./migrations",
-		Usage:   "path for database migrations",
-		EnvVars: prefixEnvVars("MIGRATIONS_DIR"),
-	}
-
 	RpcHostFlag = &cli.StringFlag{
 		Name:     "rpc-host",
 		Usage:    "The host of the rpc",
@@ -75,8 +68,6 @@ var (
 )
 
 var requireFlags = []cli.Flag{
-	MigrationsFlag,
-
 	RpcHostFlag,
 	RpcPortFlag,
 	MetricsPortFlag,
